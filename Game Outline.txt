@@ -1,0 +1,99 @@
+How to win
+-Money cap
+-Domination
+
+-Map
+	 -randomly generated
+		-defined locations (player bases, forts in the middle)
+		-30x30? 
+			-
+	-fog of war
+-Islands
+	-native
+	-small colony
+		-fast repair
+	-large port
+		-repair 
+		-gold per turn
+		-unlocks SotL
+	-fort
+		-extremely strong until prior buffs aquired
+		-improve ship (range, speed, dmg)
+		-Unlocks Turtle
+		
+-Cargo ships (CPU)
+-Env hazards
+	-fog banks
+	-reefs
+	-thunderstorms
+		-randomly generated area every so often
+	-AI Factions
+		-Merchants
+		-Kraken / Pirate hunters
+-20 Point buy system 
+	-start with 1 schooner
+-Ships
+	-Ship types
+		-Galley
+			-Oars
+			-High Carry
+			-Mid combat
+			-Mid speed
+			-3pts
+		-ship x
+			-Super high carry
+			-Very low combat
+			-low speed
+			-max towing speed
+			-4pts
+		-Schooner
+			-Very high speed
+			-Very high vision
+			-low damage
+			-low hp
+			-very low carry
+			-2pts 
+		-Frigate
+			-High speed
+			-Mid high damage / HP
+			-Medium carry
+			-5pts
+		-Ship of the Line
+			-Very High damage
+			-Mid low speed
+			-High HP
+			-Low vision
+			-High range
+			-only for gold / upgrade
+		-Turtle ship
+			-Very low speed
+			-Very high damage
+			-Very high HP
+			-High vision
+			-Immune to incendiary
+			-only for gold / upgrade
+	-variables
+		-power 1 to 10
+			-damage
+				-cannon
+				-chain shot
+				-incendiary
+					-take turn or put out
+			-hp
+			-masts
+			-range
+				-1 to 5 
+			-accuracy
+			-Ramming attack
+				-Slightly more damage to getting rammed, attacker takes damage
+				-inhibits movement for 1 turn
+		-speed 2 to 5 
+			-derelict
+				-can be captured
+				-can be towed
+				-sunk (2 turns)
+		-carry
+			-towing capacity
+				-towing based on mast v mast ratio
+		-sight
+		
