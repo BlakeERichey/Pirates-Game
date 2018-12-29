@@ -96,4 +96,8 @@ How to win
 			-towing capacity
 				-towing based on mast v mast ratio
 		-sight
+
+Movement:
+	Based on orientation, can only move forward left or right. 1 sq = 1 move
+	To go backwards, all movement expended to go 1 space backward
 		
