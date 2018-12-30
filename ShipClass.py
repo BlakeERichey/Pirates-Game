@@ -44,6 +44,7 @@ class Ship():
       rv += "\nSpeed: " + str(self.speed) + "\nCarry " + str(self.carry) + "\nSight: " + str(self.sight)
       return rv
     
+    ##changes self.pos from a grid coordinate to a pizel location
     def getPosition(self):
       x = (self.pos[0] - 1) * 64
       y = (self.pos[1] - 1) * 64
@@ -51,7 +52,7 @@ class Ship():
     
     #Accepts tuple of new coodinate in pixel form and transforms it to a 
     #grid coordinate then sets the ships location
-    def setPosition(self, newPos):
-      x = int(newPos[0]/64) + 1
-      y = int(newPos[1]/64) + 1
+    def setPosition(self, newPos, gridWidth):
+      x = int(newPos[0]/gridWidth) + 1
+      y = int(newPos[1]/gridWidth) + 1
       self.pos = (x,y)

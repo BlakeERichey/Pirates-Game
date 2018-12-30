@@ -1,91 +1,130 @@
 def Pirates():   
-    ##GUI Main Game
-    import pygame, time, sys
-    import ShipClass
-    from   ShipClass import Ship
+  ##GUI Main Game
+  import pygame, time, sys
+  import ShipClass
+  from   ShipClass import Ship
+
+  #Set Player Ships
+  x = Ship("Schooner")
+  x.pos=(3,3)
+  y = Ship("Galley")
+  y.pos = (4,4)
+  Player1Ships = [x, y] 
+  playerShips = [ship for ship in Player1Ships]
+  
+
+  #Takes coordinate and determines which ship if any it corresponds to
+  def getShip(coordinate, allShips):
+    for ship in allShips:
+      #for square in ship.pos:
+      if(coordinate == ship.pos):
+        return ship
+    return False #if no ship contains coordinate, return false
+  
+  #Take a coordinate that represents a pixel and returns the grid location
+  def pixelToCoord(pixelCoord, gridWidth):
+    x = int(pixelCoord[0]/gridWidth) + 1
+    y = int(pixelCoord[1]/gridWidth) + 1
+    return (x,y)
+
+
+  def run_game():
+    #Set Player Ships
+    x = Ship("Schooner")
+    x.pos=(3,3)
+    y = Ship("Galley")
+    y.pos = (4,4)
+    z = Ship("Schooner")
+    z.pos = (1,1)
+    Player1Ships = [x, y, z] 
+    playerShips = [ship for ship in Player1Ships]
+
+    pygame.init()
+
+    #background = (51, 70, 242)
+    battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
+
+    #Sprites Resources
+    galleySprite = pygame.image.load('./resources//images/Icon_Galley.png')
+    schSprite    = pygame.image.load('./resources//images/Icon_Schooner.png')
+
+    display_width = 1920
+    display_height = 1080
+
+    #Load and Fill Background
+    gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
+    pygame.display.set_caption('Pirates PC!')
+    clock = pygame.time.Clock()
+    #gameDisplay.fill(background)
+    gameDisplay.blit(battlefieldBackground, (0,0))   
     
-    gamePadCoordinate = ""
+    #Load Sprites
+    for ship in playerShips:
+      if(ship.type == "Galley"):
+          gameDisplay.blit(galleySprite, ship.getPosition())
+      if(ship.type == "Schooner"):
+          gameDisplay.blit(schSprite, ship.getPosition())
 
-    def run_game():
-        pygame.init()
+    pygame.display.update()
 
-        #background = (51, 70, 242)
-        battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
+    ## Flags for state management
+    flagDrag = 0
+    shipHit = False
 
-        #Sprites Resources
-        galleySprite = pygame.image.load('./resources//images/Icon_Galley.png')
-        schSprite    = pygame.image.load('./resources//images/Icon_Schooner.png')
+    #Check for events
+    while True:
+      #Width of square on battlefield
+      gridWidth = 64
+      mx = None 
+      my = None
+    
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          pygame.quit()
+          quit()
 
-        display_width = 1920
-        display_height = 1080
+        #Monitor when keyboard key is pressed
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_ESCAPE:
+            pygame.quit()
+            exit()
 
-        #Load and Fill Background
-        gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
-        pygame.display.set_caption('Pirates PC!')
-        clock = pygame.time.Clock()
-        #gameDisplay.fill(background)
-        gameDisplay.blit(battlefieldBackground, (0,0))
-
-        #Set Player Ships
-        x = Ship("Schooner")
-        x.pos=(3,3)
-        Player1Ships = [x]    
+        #Monitor when mouse is pressed
+        if event.type == pygame.MOUSEBUTTONDOWN:
+          #if left mouse button is pressed, 
+          #get position of mouse and save it ss mx and my
+          if (pygame.mouse.get_pressed()[0] == 1):
+            mx, my = pygame.mouse.get_pos()
         
-        #Load Sprites
-        for ship in Player1Ships:
-          if(ship.type == "Galley"):
-              gameDisplay.blit(galleySprite, ship.getPosition())
-          if(ship.type == "Schooner"):
-              gameDisplay.blit(schSprite, ship.getPosition())
-
-        pygame.display.update()
-
-        #Check for events
-        while True:
+          if(mx != None):
+            coord = pixelToCoord((mx, my), gridWidth)
+            shipHit = getShip(coord, playerShips)
+            if(shipHit):
+              flagDrag = 1
+              print("You hit a", shipHit.type)
         
-          for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-              pygame.quit()
-              quit()
+        #if left mouse button is released, move ship that was clicked
+        if (pygame.mouse.get_pressed()[0] == 0) and flagDrag == True:
+            flagDrag = False
+            print("key lifted")
+            newMx, newMy = pygame.mouse.get_pos()
+            shipHit.setPosition((newMx, newMy), gridWidth)
+            shipHit = False
 
-            #Monitor when keyboard key is pressed
-            if event.type == pygame.KEYDOWN:
-              if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                exit()
+      #Load and Fill Background
+      gameDisplay.blit(battlefieldBackground, (0,0))
 
-            #Monitor when mouse is pressed
-            if event.type == pygame.MOUSEBUTTONDOWN:
-              #get position of mouse and save it ss mx and my
-              mx, my = pygame.mouse.get_pos()
-            
-              for x in Player1Ships:
-                print((x.pos[0] - 1)*64)
-                print(mx)
-                if (x.pos[0] - 1)*64<mx and x.pos[0]*64>mx:
-                  print("You hit!")
-              
-            if event.type == pygame.MOUSEBUTTONUP:
-              print("key lifted")
-              newMx, newMy = pygame.mouse.get_pos()
-              
-              Player1Ships[0].setPosition((newMx, newMy))
-              print(Player1Ships[0].pos)
+      #Load Sprites
+      for ship in playerShips:
+        if(ship.type == "Galley"):
+            gameDisplay.blit(galleySprite, ship.getPosition())
+        if(ship.type == "Schooner"):
+            gameDisplay.blit(schSprite, ship.getPosition())
+      
+      #Rerender
+      pygame.display.update()
 
-          #Load and Fill Background
-          gameDisplay.blit(battlefieldBackground, (0,0))
-
-          #Load Sprites
-          for ship in Player1Ships:
-            if(ship.type == "Galley"):
-                gameDisplay.blit(galleySprite, ship.getPosition())
-            if(ship.type == "Schooner"):
-                gameDisplay.blit(schSprite, ship.getPosition())
-          
-          #Rerender
-          pygame.display.update()
-
-          time.sleep(0.03)
-    run_game()
+      time.sleep(0.03)
+  run_game()
 
 Pirates()
