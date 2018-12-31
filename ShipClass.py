@@ -1,3 +1,5 @@
+import pygame #TDL: Load sprites for ships, save in image atttribute
+
 class Ship():
 ##    type = ""
 ##    dir = "up"
@@ -45,9 +47,9 @@ class Ship():
       return rv
     
     ##changes self.pos from a grid coordinate to a pizel location
-    def getPosition(self):
-      x = (self.pos[0] - 1) * 64
-      y = (self.pos[1] - 1) * 64
+    def getPosition(self, gridWidth):
+      x = (self.pos[0] - 1) * gridWidth
+      y = (self.pos[1] - 1) * gridWidth
       return (x, y)
     
     #Accepts tuple of new coodinate in pixel form and transforms it to a 

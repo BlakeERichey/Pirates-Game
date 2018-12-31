@@ -1,8 +1,12 @@
 def Pirates():   
   ##GUI Main Game
   import pygame, time, sys
-  import ShipClass
+  import ShipClass, StateClass
+  from   StateClass import State
   from   ShipClass import Ship
+
+  #State manager
+  root = State()
 
   #Set Player Ships
   x = Ship("Schooner")
@@ -47,34 +51,19 @@ def Pirates():
     #Sprites Resources
     galleySprite = pygame.image.load('./resources//images/Icon_Galley.png')
     schSprite    = pygame.image.load('./resources//images/Icon_Schooner.png')
+    schSpriteRight = pygame.transform.rotate(schSprite, 90)
 
     display_width = 1920
     display_height = 1080
 
-    #Load and Fill Background
+    #Set GUI Size and title
     gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
     pygame.display.set_caption('Pirates PC!')
     clock = pygame.time.Clock()
-    #gameDisplay.fill(background)
-    gameDisplay.blit(battlefieldBackground, (0,0))   
-    
-    #Load Sprites
-    for ship in playerShips:
-      if(ship.type == "Galley"):
-          gameDisplay.blit(galleySprite, ship.getPosition())
-      if(ship.type == "Schooner"):
-          gameDisplay.blit(schSprite, ship.getPosition())
-
-    pygame.display.update()
-
-    ## Flags for state management
-    flagDrag = 0
-    shipHit = False
 
     #Check for events
     while True:
-      #Width of square on battlefield
-      gridWidth = 64
+      gridWidth = 64 #Width of square on battlefield
       mx = None 
       my = None
     
@@ -98,18 +87,18 @@ def Pirates():
         
           if(mx != None):
             coord = pixelToCoord((mx, my), gridWidth)
-            shipHit = getShip(coord, playerShips)
-            if(shipHit):
-              flagDrag = 1
-              print("You hit a", shipHit.type)
+            root.shipClicked = getShip(coord, playerShips)
+            if(root.shipClicked):
+              root.flagDrag = True
+              print("You clicked a", root.shipClicked.type)
         
         #if left mouse button is released, move ship that was clicked
-        if (pygame.mouse.get_pressed()[0] == 0) and flagDrag == True:
-            flagDrag = False
-            print("key lifted")
-            newMx, newMy = pygame.mouse.get_pos()
-            shipHit.setPosition((newMx, newMy), gridWidth)
-            shipHit = False
+        if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
+          print("key lifted")
+          newMx, newMy = pygame.mouse.get_pos()
+          root.shipClicked.setPosition((newMx, newMy), gridWidth)
+          root.flagDrag = False
+          root.shipClicked = False
 
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
@@ -117,9 +106,9 @@ def Pirates():
       #Load Sprites
       for ship in playerShips:
         if(ship.type == "Galley"):
-            gameDisplay.blit(galleySprite, ship.getPosition())
+          gameDisplay.blit(galleySprite, ship.getPosition(gridWidth))
         if(ship.type == "Schooner"):
-            gameDisplay.blit(schSprite, ship.getPosition())
+          gameDisplay.blit(schSpriteRight, ship.getPosition(gridWidth))
       
       #Rerender
       pygame.display.update()
