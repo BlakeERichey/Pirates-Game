@@ -48,11 +48,6 @@ def Pirates():
     #background = (51, 70, 242)
     battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
 
-    #Sprites Resources
-    galleySprite = pygame.image.load('./resources//images/Icon_Galley.png')
-    schSprite    = pygame.image.load('./resources//images/Icon_Schooner.png')
-    schSpriteRight = pygame.transform.rotate(schSprite, 90)
-
     display_width = 1920
     display_height = 1080
 
@@ -85,6 +80,7 @@ def Pirates():
           if (pygame.mouse.get_pressed()[0] == 1):
             mx, my = pygame.mouse.get_pos()
         
+          #If ship was clicked, set state of flagDrag to true
           if(mx != None):
             coord = pixelToCoord((mx, my), gridWidth)
             root.shipClicked = getShip(coord, playerShips)
@@ -105,10 +101,7 @@ def Pirates():
 
       #Load Sprites
       for ship in playerShips:
-        if(ship.type == "Galley"):
-          gameDisplay.blit(galleySprite, ship.getPosition(gridWidth))
-        if(ship.type == "Schooner"):
-          gameDisplay.blit(schSpriteRight, ship.getPosition(gridWidth))
+        gameDisplay.blit(ship.image, ship.getPosition(gridWidth))
       
       #Rerender
       pygame.display.update()

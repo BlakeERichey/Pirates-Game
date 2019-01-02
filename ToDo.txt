@@ -1,0 +1,18 @@
+improve movement to not move further than the max speed
+incorporate more sprites
+rotate ships
+add credits page
+and title screen
+add multiplayer
+add turns
+add server
+make source code protected
+add combat
+add islands
+set up for steam sale
+win conditions
+add shop//purchasing
+towing, sinking ships, stealing
+fog of war
+repair mechanic for ships
+add environmental hazards
