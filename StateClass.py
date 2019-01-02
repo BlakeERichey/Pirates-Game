@@ -1,3 +1,5 @@
+import Arrow
+from   Arrow import Arrow
 class State():
 
   def __init__(self):
@@ -7,4 +9,4 @@ class State():
     self.mx = None
     self.my = None
     self.allShips = []
-    self.arrow = None
+    self.arrow = Arrow()

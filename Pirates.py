@@ -90,9 +90,14 @@ def Pirates():
             if(root.shipClicked):
               root.flagDrag = True
               print("You clicked a", root.shipClicked.type)
-              root.arrow = Arrow()
+              root.arrow.updateArrow(coord, root)
               
-        
+        if root.flagDrag:
+          mx, my = pygame.mouse.get_pos()
+          coord = pixelToCoord((mx, my), root.gridWidth)
+          if coord != root.shipClicked.pos:
+            root.arrow.updateArrow(coord, root)
+
         #if left mouse button is released, move ship that was clicked
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
           print("key lifted")
@@ -103,6 +108,8 @@ def Pirates():
             root.shipClicked.moveShip((newMx, newMy), root.gridWidth)
           root.flagDrag = False
           root.shipClicked = False
+          root.arrow.updateArrow(False, root)
+
 
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
