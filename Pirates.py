@@ -1,9 +1,10 @@
 def Pirates():   
   ##GUI Main Game
   import pygame, time, sys
-  import ShipClass, StateClass
+  import ShipClass, StateClass, common
   from   StateClass import State
-  from   ShipClass import Ship
+  from   ShipClass  import Ship
+  from   common     import pixelToCoord
 
   #State manager
   root = State()
@@ -13,8 +14,11 @@ def Pirates():
   x.pos=(3,3)
   y = Ship("Galley")
   y.pos = (4,4)
-  Player1Ships = [x, y] 
+  z = Ship("Schooner")
+  z.pos = (1,1)
+  Player1Ships = [x, y, z] 
   playerShips = [ship for ship in Player1Ships]
+  root.allShips = playerShips
   
 
   #Takes coordinate and determines which ship if any it corresponds to
@@ -24,25 +28,24 @@ def Pirates():
       if(coordinate == ship.pos):
         return ship
     return False #if no ship contains coordinate, return false
+
+  #Takes ship that is being moved and where it is being moved to, in pixel 
+  #coords, and verifies it is a valid location that ship can be moved to
+  def moveIsValid(ship, newCoord):
+    newCoord = pixelToCoord(newCoord, root.gridWidth)
+
+    ship2 = getShip(newCoord, root.allShips)
+    distance = abs(ship.pos[0] - newCoord[0]) + abs(ship.pos[1] - newCoord[1])
+
+    if distance > ship.speed:
+      print("distance to great")
+      return False 
+    if (ship2):
+      print("ship exist here")
+      return False
+    return True
   
-  #Take a coordinate that represents a pixel and returns the grid location
-  def pixelToCoord(pixelCoord, gridWidth):
-    x = int(pixelCoord[0]/gridWidth) + 1
-    y = int(pixelCoord[1]/gridWidth) + 1
-    return (x,y)
-
-
   def run_game():
-    #Set Player Ships
-    x = Ship("Schooner")
-    x.pos=(3,3)
-    y = Ship("Galley")
-    y.pos = (4,4)
-    z = Ship("Schooner")
-    z.pos = (1,1)
-    Player1Ships = [x, y, z] 
-    playerShips = [ship for ship in Player1Ships]
-
     pygame.init()
 
     #background = (51, 70, 242)
@@ -58,9 +61,8 @@ def Pirates():
 
     #Check for events
     while True:
-      gridWidth = 64 #Width of square on battlefield
-      mx = None 
-      my = None
+      root.mx = None
+      root.my = None
     
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -76,13 +78,13 @@ def Pirates():
         #Monitor when mouse is pressed
         if event.type == pygame.MOUSEBUTTONDOWN:
           #if left mouse button is pressed, 
-          #get position of mouse and save it ss mx and my
+          #get position of mouse and save it as mx and my
           if (pygame.mouse.get_pressed()[0] == 1):
-            mx, my = pygame.mouse.get_pos()
+            root.mx, root.my = pygame.mouse.get_pos()
         
           #If ship was clicked, set state of flagDrag to true
-          if(mx != None):
-            coord = pixelToCoord((mx, my), gridWidth)
+          if(root.mx != None):
+            coord = pixelToCoord((root.mx, root.my), root.gridWidth)
             root.shipClicked = getShip(coord, playerShips)
             if(root.shipClicked):
               root.flagDrag = True
@@ -92,7 +94,10 @@ def Pirates():
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
           print("key lifted")
           newMx, newMy = pygame.mouse.get_pos()
-          root.shipClicked.setPosition((newMx, newMy), gridWidth)
+          res = moveIsValid(root.shipClicked, (newMx, newMy))
+          print("Move is valid: ", res)
+          if(res):
+            root.shipClicked.moveShip((newMx, newMy), root.gridWidth)
           root.flagDrag = False
           root.shipClicked = False
 
@@ -101,7 +106,7 @@ def Pirates():
 
       #Load Sprites
       for ship in playerShips:
-        gameDisplay.blit(ship.image, ship.getPosition(gridWidth))
+        gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
       
       #Rerender
       pygame.display.update()

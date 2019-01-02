@@ -1,4 +1,4 @@
-import pygame #TDL: Load sprites for ships, save in image atttribute
+import pygame
 
 class Ship():
 
@@ -51,3 +51,11 @@ class Ship():
     x = int(newPos[0]/gridWidth) + 1
     y = int(newPos[1]/gridWidth) + 1
     self.pos = (x,y)
+
+  #moves ship to newPos
+  #newPos: pixel coordinate of new position for ship to be moved to
+  def moveShip(self, newPos, gridWidth):
+    self.setPosition((newPos), gridWidth)
+  
+  # def rotateShip(self, newPos):
+    # if()
