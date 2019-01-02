@@ -56,6 +56,3 @@ class Ship():
   #newPos: pixel coordinate of new position for ship to be moved to
   def moveShip(self, newPos, gridWidth):
     self.setPosition((newPos), gridWidth)
-  
-  # def rotateShip(self, newPos):
-    # if()

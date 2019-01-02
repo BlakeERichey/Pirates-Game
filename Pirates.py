@@ -1,10 +1,11 @@
 def Pirates():   
   ##GUI Main Game
   import pygame, time, sys
-  import ShipClass, StateClass, common
+  import ShipClass, StateClass, common, Arrow
   from   StateClass import State
   from   ShipClass  import Ship
   from   common     import pixelToCoord
+  from   Arrow      import Arrow
 
   #State manager
   root = State()
@@ -89,6 +90,8 @@ def Pirates():
             if(root.shipClicked):
               root.flagDrag = True
               print("You clicked a", root.shipClicked.type)
+              root.arrow = Arrow()
+              
         
         #if left mouse button is released, move ship that was clicked
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
@@ -103,6 +106,9 @@ def Pirates():
 
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
+
+      if(root.arrow):
+        root.arrow.renderArrow(gameDisplay)
 
       #Load Sprites
       for ship in playerShips:

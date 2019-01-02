@@ -7,3 +7,4 @@ class State():
     self.mx = None
     self.my = None
     self.allShips = []
+    self.arrow = None
