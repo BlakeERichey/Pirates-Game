@@ -39,7 +39,7 @@ def Pirates():
     distance = abs(ship.pos[0] - newCoord[0]) + abs(ship.pos[1] - newCoord[1])
 
     if distance > ship.speed:
-      print("distance to great")
+      print("distance too great")
       return False 
     if (ship2):
       print("ship exist here")
@@ -90,7 +90,6 @@ def Pirates():
             if(root.shipClicked):
               root.flagDrag = True
               print("You clicked a", root.shipClicked.type)
-              root.arrow.updateArrow(coord, root)
               
         if root.flagDrag:
           mx, my = pygame.mouse.get_pos()
@@ -108,14 +107,14 @@ def Pirates():
             root.shipClicked.moveShip((newMx, newMy), root.gridWidth)
           root.flagDrag = False
           root.shipClicked = False
-          root.arrow.updateArrow(False, root)
+          root.arrow = Arrow()
 
 
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
 
       if(root.arrow):
-        root.arrow.renderArrow(gameDisplay)
+        root.arrow.renderArrow(gameDisplay, root)
 
       #Load Sprites
       for ship in playerShips:
