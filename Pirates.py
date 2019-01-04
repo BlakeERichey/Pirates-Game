@@ -4,7 +4,7 @@ def Pirates():
   import ShipClass, StateClass, common, Arrow
   from   StateClass import State
   from   ShipClass  import Ship
-  from   common     import pixelToCoord
+  from   common     import pixelToCoord, coordToPixel
   from   Arrow      import Arrow
 
   #State manager
@@ -16,7 +16,7 @@ def Pirates():
   y = Ship("Galley")
   y.pos = (4,4)
   z = Ship("Schooner")
-  z.pos = (1,1)
+  z.pos = (1,3)
   Player1Ships = [x, y, z] 
   playerShips = [ship for ship in Player1Ships]
   root.allShips = playerShips
@@ -104,7 +104,7 @@ def Pirates():
           res = moveIsValid(root.shipClicked, (newMx, newMy))
           print("Move is valid: ", res)
           if(res):
-            root.shipClicked.moveShip((newMx, newMy), root.gridWidth)
+            root.shipClicked.moveShip(root)
           root.flagDrag = False
           root.shipClicked = False
           root.arrow = Arrow()

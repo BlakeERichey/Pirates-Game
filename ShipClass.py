@@ -1,4 +1,5 @@
-import pygame
+import pygame, common
+from   common     import coordToPixel
 
 class Ship():
 
@@ -54,5 +55,25 @@ class Ship():
 
   #moves ship to newPos
   #newPos: pixel coordinate of new position for ship to be moved to
-  def moveShip(self, newPos, gridWidth):
-    self.setPosition((newPos), gridWidth)
+  def moveShip(self, root):
+    if root.arrow.tail.getData() != None:
+      newPos = (coordToPixel(root.arrow.tail.getData().pos, root.gridWidth))
+      gridWidth = root.gridWidth
+      self.setPosition((newPos), gridWidth)
+      self.setDir(root.arrow.tail.getData().dir)
+
+  def setDir(self, newDir):
+    self.dir = newDir
+    if self.type == "Schooner":
+      image = pygame.image.load('./resources//images/Icon_Schooner.png')
+    elif self.type == "Galley":
+      image = pygame.image.load('./resources//images/Icon_Galley.png')
+    #Additional Code for other ships images
+    if(self.dir == "up"):
+      self.image = image
+    if(self.dir == "right"):
+      self.image = pygame.transform.rotate(image, -90)
+    if(self.dir == "left"):
+      self.image = pygame.transform.rotate(image, 90)
+    if(self.dir == "down"):
+      self.image = pygame.transform.rotate(image, 180)

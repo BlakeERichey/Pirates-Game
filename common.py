@@ -29,6 +29,18 @@ def isAdjacent(pos1, pos2):
   b = (distanceY == 1)
   return (a and not b) or (not a and b)
 
+def findDir(pos, newPos):
+  x = newPos[0] - pos[0]
+  y = newPos[1] - pos[1]
+  if x == -1:
+    return "left"
+  elif x == 1:
+    return "right"
+  elif y == -1:
+    return "up"
+  elif y == 1:
+    return "down"
+
 class Node():
 
   def __init__(self, val):
