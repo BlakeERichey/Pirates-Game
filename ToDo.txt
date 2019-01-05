@@ -1,4 +1,4 @@
-improve movement to not move further than the max speed, turn ship, show ship future location, collision
+improve movement collision
 incorporate more sprites
 rotate ships
 add credits page

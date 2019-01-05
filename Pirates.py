@@ -11,13 +11,17 @@ def Pirates():
   root = State()
 
   #Set Player Ships
+  a = Ship("Schooner")
+  a.pos=(1,1)
+  b = Ship("Schooner")
+  b.pos=(12, 15)
   x = Ship("Schooner")
   x.pos=(3,3)
   y = Ship("Galley")
   y.pos = (4,4)
   z = Ship("Schooner")
   z.pos = (1,3)
-  Player1Ships = [x, y, z] 
+  Player1Ships = [x, y, z, a, b] 
   playerShips = [ship for ship in Player1Ships]
   root.allShips = playerShips
   
@@ -94,8 +98,7 @@ def Pirates():
         if root.flagDrag:
           mx, my = pygame.mouse.get_pos()
           coord = pixelToCoord((mx, my), root.gridWidth)
-          if coord != root.shipClicked.pos:
-            root.arrow.updateArrow(coord, root)
+          root.arrow.updateArrow(coord, root)
 
         #if left mouse button is released, move ship that was clicked
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:

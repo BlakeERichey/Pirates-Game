@@ -44,8 +44,12 @@ class Arrow():
       self.head.getData().setDir(root.shipClicked.pos, pos)
 
     #pos in linked list and is equal to the previous position to the last
-    if len(allCoord) >= 2 and pos == allCoord[len(allCoord)-2].pos:
+    if (len(allCoord) >= 2 and pos == allCoord[len(allCoord)-2].pos):
       removeNode(currentNode)
+
+    #return to zero length of arrow path
+    if (len(allCoord) == 1 and pos == root.shipClicked.pos):
+      self.head = Node(None)
 
     print("allcoord",[x.pos for x in allCoord])
     #if pos is adjacent to the last position in linked list
