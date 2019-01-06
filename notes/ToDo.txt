@@ -1,6 +1,5 @@
 improve movement collision
 incorporate more sprites
-rotate ships
 add credits page
 and title screen
 add multiplayer

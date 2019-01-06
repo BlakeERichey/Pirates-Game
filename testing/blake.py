@@ -1,20 +1,12 @@
-##This is a testing page for debugging code and testing methods 
+#Template for a page
 import pygame
-import common
-import StateClass
 
-from StateClass import State
-from common     import coordToPixel, isInt, isAdjacent, Node
-root = State()
-
-def main_menu():
+def run_game():
   pygame.init()
   
-  background = (51, 70, 200)
-  blue  = [0,200,200]
-  green = [0,255,0]
+  background = (51, 70, 242)
   battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
-  menuBackground = pygame.image.load('./resources/images/menu-background.jpg')
+
   display_width = 1920
   display_height = 1080
 
@@ -35,22 +27,10 @@ def main_menu():
           if event.key == pygame.K_ESCAPE:
             pygame.quit()
             exit()
-        
-        #Left mouse button is clicked
-        if (pygame.mouse.get_pressed()[0] == 1) and root.color == green:
-          root.page = "Game"
-          print(root.page)
-
-    mx, my = pygame.mouse.get_pos()
-    root.color = blue
-    if mx >= 100 and mx < 240 and my > 600 and my < 690:
-      root.color = green 
 
     gameDisplay.fill(background)
-    gameDisplay.blit(menuBackground, (0,0))
-    font = pygame.font.SysFont("Arial", 70, True)
-    play = font.render("Play", True, root.color, None)
-    gameDisplay.blit(play, (100,600))
+    gp_width = pygame.font.SysFont("Arial", 70, True).render("Testing", True, [0, 0, 0], None)
+    gameDisplay.blit(battlefieldBackground, (0,0))
     pygame.display.update()
 
-main_menu()
+run_game()

@@ -1,14 +1,11 @@
 def Play(root):   
   ##GUI Main Game
   import pygame, time, sys
-  import ShipClass, StateClass, common, Arrow
-  from   StateClass import State
-  from   ShipClass  import Ship
-  from   common     import pixelToCoord, coordToPixel
-  from   Arrow      import Arrow
-
-  #State manager
-  # root = State()
+  import components.ShipClass, components.StateClass, components.common, components.Arrow
+  from   components.ShipClass  import Ship
+  from   components.StateClass import State
+  from   components.Arrow      import Arrow
+  from   components.common     import pixelToCoord, coordToPixel
 
   #Set Player Ships
   a = Ship("Schooner")

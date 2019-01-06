@@ -1,5 +1,5 @@
-import pygame, common
-from   common     import coordToPixel
+import pygame, components.common
+from   components.common     import coordToPixel
 
 class Ship():
 

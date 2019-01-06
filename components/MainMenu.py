@@ -1,10 +1,10 @@
 ##This is a testing page for debugging code and testing methods 
 import pygame
-import common
-import StateClass
+import components.common
+import components.StateClass
 
-from StateClass import State
-from common     import coordToPixel, isInt, isAdjacent, Node
+from components.StateClass import State
+from components.common     import coordToPixel, isInt, isAdjacent, Node
 
 def main_menu(root):
   # pygame.init()

@@ -1,12 +1,11 @@
 ##This is a testing page for debugging code and testing methods 
 import pygame
-import Play, common, StateClass
-import components
+import components.Play, components.common, components.StateClass
 
-from   Play       import Play
-from   MainMenu   import main_menu
-from   StateClass import State
-from   common     import coordToPixel, isInt, isAdjacent, Node
+from   components.Play       import Play
+from   components.StateClass import State
+from   components.MainMenu   import main_menu
+from   components.common     import coordToPixel, isInt, isAdjacent, Node
 
 def run_game():
   root = State()

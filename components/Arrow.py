@@ -1,7 +1,7 @@
 import pygame
-import common
+import components.common
 
-from common import coordToPixel, isInt, isAdjacent, Node, addNode, removeNode, findDir
+from components.common import coordToPixel, isInt, isAdjacent, Node, addNode, removeNode, findDir
 
 class Arrow():
 
