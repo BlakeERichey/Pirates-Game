@@ -10,3 +10,5 @@ class State():
     self.my = None
     self.allShips = []
     self.arrow = Arrow()
+    self.color = ""
+    self.page = "Menu"

@@ -1,4 +1,4 @@
-def Pirates():   
+def Play(root):   
   ##GUI Main Game
   import pygame, time, sys
   import ShipClass, StateClass, common, Arrow
@@ -8,11 +8,13 @@ def Pirates():
   from   Arrow      import Arrow
 
   #State manager
-  root = State()
+  # root = State()
 
   #Set Player Ships
   a = Ship("Schooner")
   a.pos=(1,1)
+  newShip = Ship("Galley")
+  newShip.pos = (17,7)
   b = Ship("Schooner")
   b.pos=(12, 15)
   x = Ship("Schooner")
@@ -21,7 +23,7 @@ def Pirates():
   y.pos = (4,4)
   z = Ship("Schooner")
   z.pos = (1,3)
-  Player1Ships = [x, y, z, a, b] 
+  Player1Ships = [x, y, z, a, b, newShip] 
   playerShips = [ship for ship in Player1Ships]
   root.allShips = playerShips
   
@@ -65,7 +67,7 @@ def Pirates():
     clock = pygame.time.Clock()
 
     #Check for events
-    while True:
+    while root.page == "Play":
       root.mx = None
       root.my = None
     
@@ -128,5 +130,3 @@ def Pirates():
 
       time.sleep(0.03)
   run_game()
-
-Pirates()

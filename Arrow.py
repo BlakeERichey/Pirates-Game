@@ -51,7 +51,6 @@ class Arrow():
     if (len(allCoord) == 1 and pos == root.shipClicked.pos):
       self.head = Node(None)
 
-    print("allcoord",[x.pos for x in allCoord])
     #if pos is adjacent to the last position in linked list
     if (len(allCoord) > 0):
       lastCoord = allCoord[len(allCoord) - 1]
