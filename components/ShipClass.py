@@ -6,30 +6,40 @@ class Ship():
   #how to rotate an image
   #schSpriteRight = pygame.transform.rotate(schSprite, 90)
 
-  def __init__(self, ship):
+  def __init__(self, ship, pos):
     self.type=ship
     self.dir="up"
-    self.pos = (0,0)
+    self.pos = pos
     self.owner="Player1"
+    self.coords = []
     if(ship == "Galley"):
+      self.size=2
       self.damage=self.hp=self.masts=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
       self.image = pygame.image.load('./resources//images/Icon_Galley.png')
+      self.imagePos = (self.pos)
     elif(ship=="Cargo"):
       self.damage=1
-      self.aRange=self.accuracy=self.speed=2
+      self.aRange=self.accuracy=self.speed=self.size=2
       self.masts=self.sight=3
       self.hp=4
       self.carry=5
+      self.imagePos = (self.pos)
+      self.image = pygame.image.load('./resources//images/Icon_Cargo.png')
     elif(ship == "Schooner"):
-      self.damage=self.carry=1
+      self.damage=self.carry=self.size=1
       self.hp=self.masts=self.aRange=2
       self.accuracy=3
       self.speed=self.sight=5
+      self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Schooner.png')
     elif(ship=="Frigate"):
       self.damage=self.aRange=self.accuracy=self.sight=4
-      self.hp=self.masts=3
+      self.hp=self.masts=self.size=3
       self.speed=self.carry=2
+      self.imagePos = (self.pos)
+      self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
+    self.setCoords()
+    
           
   def __str__(self):
     rv = "Ship:\nType: " + str(self.type) + "\nDirection: " + str(self.dir)
@@ -38,12 +48,13 @@ class Ship():
     rv += "\nHp: " + str(self.hp) + "\nMasts: " + str(self.masts)
     rv += "\nRange: " + str(self.aRange) + "\nAccuracy: " + str(self.accuracy)
     rv += "\nSpeed: " + str(self.speed) + "\nCarry " + str(self.carry) + "\nSight: " + str(self.sight)
+    rv += "\nimagePos" + str(self.imagePos) + "\nCoords: " + str(self.coords)
     return rv
   
   ##changes self.pos from a grid coordinate to a pizel location
   def getPosition(self, gridWidth):
-    x = (self.pos[0] - 1) * gridWidth
-    y = (self.pos[1] - 1) * gridWidth
+    x = (self.imagePos[0] - 1) * gridWidth
+    y = (self.imagePos[1] - 1) * gridWidth
     return (x, y)
   
   #Accepts tuple of new coodinate in pixel form and transforms it to a 
@@ -56,18 +67,26 @@ class Ship():
   #moves ship to newPos
   #newPos: pixel coordinate of new position for ship to be moved to
   def moveShip(self, root):
-    if root.arrow.tail.getData() != None:
-      newPos = (coordToPixel(root.arrow.tail.getData().pos, root.gridWidth))
+    if root.path.tail.getData() != None:
+      newPos = (coordToPixel(root.path.tail.getData().pos, root.gridWidth))
       gridWidth = root.gridWidth
       self.setPosition((newPos), gridWidth)
-      self.setDir(root.arrow.tail.getData().dir)
+      self.setDir(root.path.tail.getData().dir)
+      self.setImagePos(root)
+      self.setCoords()
+      print(self.coords)
 
+  #sets direction of ship to newDir then sets image to match
   def setDir(self, newDir):
     self.dir = newDir
     if self.type == "Schooner":
       image = pygame.image.load('./resources//images/Icon_Schooner.png')
     elif self.type == "Galley":
       image = pygame.image.load('./resources//images/Icon_Galley.png')
+    elif self.type == "Cargo":
+      image = pygame.image.load('./resources//images/Icon_Cargo.png')
+    elif self.type == "Frigate":
+      image = pygame.image.load('./resources//images/Icon_Frigate.png')
     #Additional Code for other ships images
     if(self.dir == "up"):
       self.image = image
@@ -77,3 +96,43 @@ class Ship():
       self.image = pygame.transform.rotate(image, 90)
     if(self.dir == "down"):
       self.image = pygame.transform.rotate(image, 180)
+
+  #relocates where ship image renders based on the size of the ship
+  def setImagePos(self, root):
+    ship = root.shipClicked
+    if ship.type != "Schooner":
+      if ship.dir == "right":
+        if ship.type == "Frigate":
+          ship.imagePos = (ship.pos[0] - 2, ship.pos[1]) 
+        elif ship.type == "Galley":
+          ship.imagePos = (ship.pos[0] - 1, ship.pos[1])
+        elif ship.type == "Cargo":
+          ship.imagePos = (ship.pos[0] - 1, ship.pos[1])  
+      elif ship.dir == "down":
+        if ship.type == "Frigate":
+          ship.imagePos = (ship.pos[0], ship.pos[1] - 2) 
+        elif ship.type == "Galley":
+          ship.imagePos = (ship.pos[0], ship.pos[1] - 1)
+        elif ship.type == "Cargo":
+          ship.imagePos = (ship.pos[0], ship.pos[1] - 1) 
+      else:
+        ship.imagePos = ship.pos
+    else:
+      ship.imagePos = ship.pos
+  
+  #sets location of all points the ship
+  def setCoords(self):
+    start = self.pos
+    coords = []
+    for x in range(0, self.size):
+      if self.dir == "up":
+        coords.append((start[0], start[1]+x))
+      if self.dir == "down":
+        coords.append((start[0], start[1]-x))
+      if self.dir == "right":
+        coords.append((start[0]-x, start[1]))
+      if self.dir == "left":
+        coords.append((start[0]+x, start[1]))
+    self.coords = coords
+
+      

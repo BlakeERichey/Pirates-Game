@@ -41,6 +41,20 @@ def findDir(pos, newPos):
   elif y == 1:
     return "down"
 
+def isBehind(ship, newPos):
+  pos = ship.pos
+  dir = ship.dir
+  if dir == "up" and (newPos[1] - pos[1] == 1):
+    return True
+  elif dir == "down" and (newPos[1] - pos[1] == -1):
+    return True
+  elif dir == "left" and (newPos[0] - pos[0] == 1):
+    return True
+  elif dir == "right" and (newPos[0] - pos[0] == -1):
+    return True
+  else:
+    return False
+
 class Node():
 
   def __init__(self, val):

@@ -1,25 +1,19 @@
 def Play(root):   
   ##GUI Main Game
   import pygame, time, sys
-  import components.ShipClass, components.StateClass, components.common, components.Arrow
+  import components.ShipClass, components.StateClass, components.common, components.Path
   from   components.ShipClass  import Ship
   from   components.StateClass import State
-  from   components.Arrow      import Arrow
+  from   components.Path      import Path
   from   components.common     import pixelToCoord, coordToPixel
 
   #Set Player Ships
-  a = Ship("Schooner")
-  a.pos=(1,1)
-  newShip = Ship("Galley")
-  newShip.pos = (17,7)
-  b = Ship("Schooner")
-  b.pos=(12, 15)
-  x = Ship("Schooner")
-  x.pos=(3,3)
-  y = Ship("Galley")
-  y.pos = (4,4)
-  z = Ship("Schooner")
-  z.pos = (1,3)
+  a = Ship("Schooner", (1,1))
+  newShip = Ship("Galley", (10,7))
+  b = Ship("Cargo", (10,2))
+  x = Ship("Schooner", (3,3))
+  y = Ship("Galley", (4,4))
+  z = Ship("Frigate", (5,5))
   Player1Ships = [x, y, z, a, b, newShip] 
   playerShips = [ship for ship in Player1Ships]
   root.allShips = playerShips
@@ -29,7 +23,7 @@ def Play(root):
   def getShip(coordinate, allShips):
     for ship in allShips:
       #for square in ship.pos:
-      if(coordinate == ship.pos):
+      if(coordinate in ship.coords):
         return ship
     return False #if no ship contains coordinate, return false
 
@@ -43,10 +37,20 @@ def Play(root):
 
     if distance > ship.speed:
       print("distance too great")
-      return False 
+      return False
     if (ship2):
       print("ship exist here")
       return False
+    
+    #create a temporary ship and test that the new ships locations dont cross another ship
+    #excluding the ship being moved
+    otherShips = root.allShips[:]
+    otherShips.remove(ship)
+    tempShip = Ship(ship.type, ship.pos)
+    tempShip.moveShip(root)
+    for point in tempShip.coords:
+      if getShip(point, otherShips):
+        return False
     return True
   
   def run_game():
@@ -97,7 +101,7 @@ def Play(root):
         if root.flagDrag:
           mx, my = pygame.mouse.get_pos()
           coord = pixelToCoord((mx, my), root.gridWidth)
-          root.arrow.updateArrow(coord, root)
+          root.path.updateArrow(coord, root)
 
         #if left mouse button is released, move ship that was clicked
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
@@ -109,14 +113,14 @@ def Play(root):
             root.shipClicked.moveShip(root)
           root.flagDrag = False
           root.shipClicked = False
-          root.arrow = Arrow()
+          root.path = Path()
 
 
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
 
-      if(root.arrow):
-        root.arrow.renderArrow(gameDisplay, root)
+      if(root.path):
+        root.path.renderArrow(gameDisplay, root)
 
       #Load Sprites
       for ship in playerShips:

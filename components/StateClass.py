@@ -1,5 +1,5 @@
-import components.Arrow
-from   components.Arrow import Arrow
+import components.Path
+from   components.Path import Path
 class State():
 
   def __init__(self):
@@ -9,6 +9,6 @@ class State():
     self.mx = None
     self.my = None
     self.allShips = []
-    self.arrow = Arrow()
-    self.color = ""
+    self.path = Path()
+    self.select = False
     self.page = "Menu"

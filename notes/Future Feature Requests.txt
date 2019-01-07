@@ -1,0 +1,1 @@
+movement upgrade: update pathing to show up red if a move is invalid

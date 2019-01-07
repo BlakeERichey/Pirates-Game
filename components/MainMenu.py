@@ -35,17 +35,30 @@ def main_menu(root):
             exit()
         
         #Left mouse button is clicked
-        if (pygame.mouse.get_pressed()[0] == 1) and root.color == green:
+        if (pygame.mouse.get_pressed()[0] == 1) and root.select == "Play":
           root.page = "Play"
-          print(root.page)
+        if (pygame.mouse.get_pressed()[0] == 1) and root.select == "Quit":
+          pygame.quit()
+          exit()
 
+    #monitor mouse location
     mx, my = pygame.mouse.get_pos()
-    root.color = blue
     if mx >= 100 and mx < 240 and my > 600 and my < 690:
-      root.color = green 
+      root.select = "Play" 
+    elif mx >= 100 and mx < 240 and my > 700 and my < 790:
+      root.select = "Quit"
+    else:
+      root.select = False
 
+    #render background
     gameDisplay.blit(menuBackground, (0,0))
+    
+    #render words
     font = pygame.font.SysFont("Arial", 70, True)
-    play = font.render("Play", True, root.color, None)
-    gameDisplay.blit(play, (100,600))
+    play = font.render("Play", True, (blue, green)[root.select == "Play"], None)
+    quit = font.render("Quit", True, (blue, green)[root.select == "Quit"], None)
+    gameDisplay.blit(play, (100, 600))
+    gameDisplay.blit(quit, (100, 700))
+
+    #update gui
     pygame.display.update()
