@@ -11,6 +11,10 @@ def Play(root):
   display_width = 1920
   display_height = 1080
 
+  #initalize music
+  pygame.mixer.music.load('./resources/music/music.mp3')
+  pygame.mixer.music.play(loops=-1, start=0.0)
+
   #Set Player Ships
   a = Ship("Schooner", (1,1))
   newShip = Ship("Galley", (10,7))

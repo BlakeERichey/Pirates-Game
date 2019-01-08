@@ -1,4 +1,4 @@
-##This is a testing page for debugging code and testing methods 
+##This is the primary executable for the game. 
 import pygame
 import components.Play, components.common, components.StateClass
 
@@ -11,7 +11,7 @@ def run_game():
   root = State()
   pygame.init()
 
-  #Check for events
+  #Determine which page to display
   while True:
     if root.page == "Play":
       Play(root)

@@ -12,6 +12,7 @@ def main_menu(root):
   # background = (51, 70, 200)
   blue  = [0,200,200]
   green = [0,255,0]
+  anchor = pygame.image.load('./resources/images/Anchor.png')
   menuBackground = pygame.image.load('./resources/images/menu-background.jpg')
   display_width = 1920
   display_height = 1080
@@ -59,6 +60,10 @@ def main_menu(root):
     quit = font.render("Quit", True, (blue, green)[root.select == "Quit"], None)
     gameDisplay.blit(play, (100, 600))
     gameDisplay.blit(quit, (100, 700))
+    if root.select == "Play":
+      gameDisplay.blit(anchor, (25, 610))
+    elif root.select == "Quit":
+      gameDisplay.blit(anchor, (25, 710))
 
     #update gui
     pygame.display.update()

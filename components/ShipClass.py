@@ -14,30 +14,31 @@ class Ship():
     self.coords = []
     if(ship == "Galley"):
       self.size=2
-      self.damage=self.hp=self.masts=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
+      self.damage=self.maxHp=self.masts=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
       self.image = pygame.image.load('./resources//images/Icon_Galley.png')
       self.imagePos = (self.pos)
     elif(ship=="Cargo"):
       self.damage=1
       self.aRange=self.accuracy=self.speed=self.size=2
       self.masts=self.sight=3
-      self.hp=4
+      self.maxHp=4
       self.carry=5
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Cargo.png')
     elif(ship == "Schooner"):
       self.damage=self.carry=self.size=1
-      self.hp=self.masts=self.aRange=2
+      self.maxHp=self.masts=self.aRange=2
       self.accuracy=3
       self.speed=self.sight=5
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Schooner.png')
     elif(ship=="Frigate"):
       self.damage=self.aRange=self.accuracy=self.sight=4
-      self.hp=self.masts=self.size=3
+      self.maxHp=self.masts=self.size=3
       self.speed=self.carry=2
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
+    self.hp = self.maxHp
     self.setCoords()
     
           
