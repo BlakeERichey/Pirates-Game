@@ -74,7 +74,6 @@ class Ship():
       self.setDir(root.path.tail.getData().dir)
       self.setImagePos(root)
       self.setCoords()
-      print(self.coords)
 
   #sets direction of ship to newDir then sets image to match
   def setDir(self, newDir):
@@ -134,5 +133,3 @@ class Ship():
       if self.dir == "left":
         coords.append((start[0]+x, start[1]))
     self.coords = coords
-
-      

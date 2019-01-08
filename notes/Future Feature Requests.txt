@@ -1,1 +1,2 @@
 movement upgrade: update pathing to show up red if a move is invalid
+update Node Class to manage adding and removing nodes

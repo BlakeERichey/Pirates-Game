@@ -12,3 +12,4 @@ class State():
     self.path = Path()
     self.select = False
     self.page = "Menu"
+    self.canHit = []  #represents list of available places that a ship can hit

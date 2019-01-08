@@ -1,40 +1,25 @@
-# #Template for a page
-# import pygame
+import pygame, time, sys, os
+# import components.ShipClass, components.StateClass, components.common, components.Path
+# from   components.ShipClass  import Ship
+os.system("StateClass.py")
+from   StateClass import State
+# from   components.Path       import Path
+# from   components.common     import pixelToCoord, coordToPixel, findDistance
+# root = State()
 
-# def run_game():
-#   pygame.init()
-  
-#   background = (51, 70, 242)
-#   battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
+# display_width  = 1920
+# display_height = 1080
+# root.gridWidth = 64
 
-#   display_width = 1920
-#   display_height = 1080
+# def renderCanHit(root):
+#   maxX = int(display_width / root.gridWidth)
+#   maxY = int(display_height / root.gridWidth)
+#   allPossibleCoords = []
+#   for x in range(1, maxX):
+#     for y in range(1, maxY):
+#       allPossibleCoords.append((x,y))
+#   print(allPossibleCoords)
 
-#   #Set GUI Size and title
-#   gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
-#   pygame.display.set_caption('Pirates PC!')
-#   clock = pygame.time.Clock()
-
-#   #Check for events
-#   while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#           pygame.quit()
-#           quit()
-
-#         #Monitor when keyboard key is pressed
-#         if event.type == pygame.KEYDOWN:
-#           if event.key == pygame.K_ESCAPE:
-#             pygame.quit()
-#             exit()
-
-#     gameDisplay.fill(background)
-#     gp_width = pygame.font.SysFont("Arial", 70, True).render("Testing", True, [0, 0, 0], None)
-#     gameDisplay.blit(battlefieldBackground, (0,0))
-#     pygame.display.update()
-
-# run_game()
-
-a= [1,2,3,4]
-b=a[:]
-print(b)
+# renderCanHit(root)
+root = State()
+print(root.shipClicked)

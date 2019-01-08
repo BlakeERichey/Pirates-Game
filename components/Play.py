@@ -4,15 +4,21 @@ def Play(root):
   import components.ShipClass, components.StateClass, components.common, components.Path
   from   components.ShipClass  import Ship
   from   components.StateClass import State
-  from   components.Path      import Path
-  from   components.common     import pixelToCoord, coordToPixel
+  from   components.Path       import Path
+  from   components.common     import pixelToCoord, coordToPixel, findDistance
+
+  #Set Resolution
+  display_width = 1920
+  display_height = 1080
 
   #Set Player Ships
   a = Ship("Schooner", (1,1))
   newShip = Ship("Galley", (10,7))
+  newShip.owner = "Player2"
   b = Ship("Cargo", (10,2))
   x = Ship("Schooner", (3,3))
   y = Ship("Galley", (4,4))
+  y.owner = "Player2"
   z = Ship("Frigate", (5,5))
   Player1Ships = [x, y, z, a, b, newShip] 
   playerShips = [ship for ship in Player1Ships]
@@ -52,15 +58,47 @@ def Play(root):
       if getShip(point, otherShips):
         return False
     return True
-  
+
+  def findCanHit(root):
+    root.canHit = [] #reset canHit in event no ship is clicked
+    if root.shipClicked:
+      maxX = int(display_width / root.gridWidth) + 1
+      maxY = int(display_height / root.gridWidth) + 2
+      allPossibleCoords = []
+      for x in range(1, maxX):
+        for y in range(1, maxY):
+          allPossibleCoords.append((x,y))
+      
+      #determine enemy ships
+      otherShips = []
+      for ship in root.allShips:
+        if ship.owner != root.shipClicked.owner:
+          otherShips.append(ship)
+      
+      #find enemy ships locations
+      otherShipsCoords = []
+      for ship in otherShips:
+        for point in ship.coords:
+          otherShipsCoords.append(point) 
+      
+      #if enemy ship location point is within range of ship clicked, add point to root.canHit
+      for point in allPossibleCoords:
+        for coord in root.shipClicked.coords:
+          if findDistance(coord, point) <= root.shipClicked.aRange and point in otherShipsCoords:
+            if point not in root.canHit:
+              root.canHit.append(point)     
+
+  def renderCanHit(root, display, icon):
+    findCanHit(root)
+    for point in root.canHit:
+      display.blit(icon, coordToPixel(point, root.gridWidth))
+
   def run_game():
     pygame.init()
 
     #background = (51, 70, 242)
     battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
-
-    display_width = 1920
-    display_height = 1080
+    dangerIcon=pygame.image.load('./resources/images/danger.png')
 
     #Set GUI Size and title
     gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
@@ -107,13 +145,18 @@ def Play(root):
         if (pygame.mouse.get_pressed()[0] == 0) and root.flagDrag == True:
           print("key lifted")
           newMx, newMy = pygame.mouse.get_pos()
-          res = moveIsValid(root.shipClicked, (newMx, newMy))
-          print("Move is valid: ", res)
-          if(res):
-            root.shipClicked.moveShip(root)
-          root.flagDrag = False
-          root.shipClicked = False
-          root.path = Path()
+          coord = pixelToCoord((newMx, newMy), root.gridWidth)
+          if coord in root.shipClicked.coords:
+            print("Ship Active but not dragging")
+            root.flagDrag = False
+          else:
+            res = moveIsValid(root.shipClicked, (newMx, newMy))
+            print("Move is valid: ", res)
+            if(res):
+              root.shipClicked.moveShip(root)
+            root.flagDrag = False
+            root.shipClicked = False
+            root.path = Path()
 
 
       #Load and Fill Background
@@ -125,6 +168,7 @@ def Play(root):
       #Load Sprites
       for ship in playerShips:
         gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
+      renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
       
       #Rerender
       pygame.display.update()

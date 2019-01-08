@@ -22,7 +22,7 @@ def findDistance(a, b):
 
 def isAdjacent(pos1, pos2):
   distanceX=abs(pos1[0]-pos2[0])
-  distanceY=abs(pos1[1] - pos2[1])
+  distanceY=abs(pos1[1]-pos2[1])
   if distanceX > 1 or distanceY > 1:
     return False
   a = (distanceX == 1)
