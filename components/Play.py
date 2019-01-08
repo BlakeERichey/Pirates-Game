@@ -92,6 +92,15 @@ def Play(root):
     findCanHit(root)
     for point in root.canHit:
       display.blit(icon, coordToPixel(point, root.gridWidth))
+  
+  def makeAttack(root):
+    print("hit")
+    root.attack.hp -= root.shipClicked.damage
+    print(root.attack.type, "Health after attack is", root.attack.hp)
+    if root.attack.hp <= 0:
+      root.allShips.remove(root.attack)
+    root.attack = None
+    root.shipClicked = None
 
   def run_game():
     pygame.init()
@@ -111,6 +120,7 @@ def Play(root):
       root.my = None
     
       for event in pygame.event.get():
+        # print("\n\n\n\n" + root)
         if event.type == pygame.QUIT:
           pygame.quit()
           quit()
@@ -131,10 +141,14 @@ def Play(root):
           #If ship was clicked, set state of flagDrag to true
           if(root.mx != None):
             coord = pixelToCoord((root.mx, root.my), root.gridWidth)
-            root.shipClicked = getShip(coord, playerShips)
-            if(root.shipClicked):
-              root.flagDrag = True
-              print("You clicked a", root.shipClicked.type)
+            if coord in root.canHit:
+                root.attack = getShip(coord, playerShips)
+                makeAttack(root)
+            else:
+              root.shipClicked = getShip(coord, playerShips)
+              if(root.shipClicked):
+                root.flagDrag = True
+                print("You clicked a", root.shipClicked.type)
               
         if root.flagDrag:
           mx, my = pygame.mouse.get_pos()
@@ -148,6 +162,7 @@ def Play(root):
           coord = pixelToCoord((newMx, newMy), root.gridWidth)
           if coord in root.shipClicked.coords:
             print("Ship Active but not dragging")
+            print(root.canHit)
             root.flagDrag = False
           else:
             res = moveIsValid(root.shipClicked, (newMx, newMy))
