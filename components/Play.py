@@ -63,6 +63,7 @@ def Play(root):
         return False
     return True
 
+  #sets root.canHit to all locations active ship can hit that contains an enemy ship
   def findCanHit(root):
     root.canHit = [] #reset canHit in event no ship is clicked
     if root.shipClicked:
@@ -92,6 +93,7 @@ def Play(root):
             if point not in root.canHit:
               root.canHit.append(point)     
 
+  #displays red box everywhere active ship can hit an enemy ship
   def renderCanHit(root, display, icon):
     findCanHit(root)
     for point in root.canHit:
@@ -187,10 +189,8 @@ def Play(root):
       #Load Sprites
       for ship in playerShips:
         gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
+        ship.renderHealthBar(gameDisplay, root)
       renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
-
-      pygame.draw.rect(gameDisplay, (0,255,0), [0,0,64,10])
-      pygame.draw.rect(gameDisplay, (255,0,0), [32,0,32,10])
       
       #Rerender
       pygame.display.update()

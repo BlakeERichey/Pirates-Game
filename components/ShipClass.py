@@ -1,5 +1,7 @@
-import pygame, components.common
+import pygame, components.common, components.HealthBar
+from   components.HealthBar  import HealthBar
 from   components.common     import coordToPixel
+
 
 class Ship():
 
@@ -40,6 +42,7 @@ class Ship():
       self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
     self.hp = self.maxHp
     self.setCoords()
+    self.healthBar = HealthBar(self.pos)
     
           
   def __str__(self):
@@ -75,6 +78,7 @@ class Ship():
       self.setDir(root.path.tail.getData().dir)
       self.setImagePos(root)
       self.setCoords()
+      self.healthBar.move(self)
 
   #sets direction of ship to newDir then sets image to match
   def setDir(self, newDir):
@@ -134,3 +138,8 @@ class Ship():
       if self.dir == "left":
         coords.append((start[0]+x, start[1]))
     self.coords = coords
+
+  def renderHealthBar(self, display, root):
+    x, y = coordToPixel(self.healthBar.pos, root.gridWidth)
+    pygame.draw.rect(display, (0,255,0), [x,y,64,5]) #draw green bar
+    pygame.draw.rect(display, (255,0,0), [x,y,32,5]) #draw red bar
