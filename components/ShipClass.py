@@ -40,6 +40,7 @@ class Ship():
       self.speed=self.carry=2
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
+    self.maxHp = 2 * self.maxHp
     self.hp = self.maxHp
     self.setCoords()
     self.healthBar = HealthBar(self.pos)
@@ -141,5 +142,7 @@ class Ship():
 
   def renderHealthBar(self, display, root):
     x, y = coordToPixel(self.healthBar.pos, root.gridWidth)
-    pygame.draw.rect(display, (0,255,0), [x,y,64,5]) #draw green bar
-    pygame.draw.rect(display, (255,0,0), [x,y,32,5]) #draw red bar
+    width = root.gridWidth * self.healthBar.size
+    self.healthBar.setPercent(self)
+    pygame.draw.rect(display, (255,0,0), [x,y,width,5]) #draw red bar
+    pygame.draw.rect(display, (0,255,0), [x,y,width*self.healthBar.percent,5]) #draw green bar

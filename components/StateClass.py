@@ -14,6 +14,7 @@ class State():
     self.page = "Menu"
     self.canHit = []  #represents list of available places that a ship can hit
     self.attack = None #represents Ship being attacked
+    self.showMenu = False #Should top menu bar of game be displayed
 
   def __str__(self):
     rv = "FlagDrag: "       + str(self.flagDrag)

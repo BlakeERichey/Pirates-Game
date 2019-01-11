@@ -1,11 +1,11 @@
 def Play(root):   
   ##GUI Main Game
-  import pygame, time, sys
+  import pygame, time, sys, random
   import components.ShipClass, components.StateClass, components.common, components.Path
   from   components.ShipClass  import Ship
   from   components.StateClass import State
   from   components.Path       import Path
-  from   components.common     import pixelToCoord, coordToPixel, findDistance
+  from   components.common     import pixelToCoord, coordToPixel, findDistance, cursorLocated 
 
   #Set Resolution
   display_width = 1920
@@ -100,8 +100,13 @@ def Play(root):
       display.blit(icon, coordToPixel(point, root.gridWidth))
   
   def makeAttack(root):
-    print("hit")
-    root.attack.hp -= root.shipClicked.damage
+    ship = root.shipClicked
+    miss = (False, True)[random.choice(range(1,6)) > ship.accuracy]
+    if not(miss):
+      root.attack.hp -= root.shipClicked.damage
+      print("hit")
+    else:
+      print("miss")
     print(root.attack.type, "Health after attack is", root.attack.hp)
     if root.attack.hp <= 0:
       root.allShips.remove(root.attack)
@@ -124,7 +129,13 @@ def Play(root):
     while root.page == "Play":
       root.mx = None
       root.my = None
-    
+
+      #check for if menu bar should be displayed
+      if cursorLocated(0, 1920, -10, 10) and root.showMenu == False:
+        root.showMenu = True
+      elif root.showMenu == True and not(cursorLocated(0, 1920, -10, 30)):
+        root.showMenu = False
+
       for event in pygame.event.get():
         # print("\n\n\n\n" + root)
         if event.type == pygame.QUIT:
@@ -191,6 +202,13 @@ def Play(root):
         gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
         ship.renderHealthBar(gameDisplay, root)
       renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
+
+      #Show menu bar
+      if root.showMenu == True:
+        pygame.draw.rect(gameDisplay, (32,32,32), [0,0,display_width,30]) #draw grey bar
+        pygame.draw.rect(gameDisplay, (105,105,105), [0,0,63,30]) #draw first menu option bar
+        pygame.draw.rect(gameDisplay, (105,105,105), [65,0,64,30]) #draw first menu option bar
+
       
       #Rerender
       pygame.display.update()

@@ -12,7 +12,7 @@ class HealthBar():
     #length, pos, percent of hp
 
   def setPercent(self, ship):
-    self.hp = ship.hp / float(ship.maxHp)
+    self.percent = ship.hp / float(ship.maxHp)
 
   #changes pos and size by getting direction and location of ship
   def move(self, ship):
@@ -20,5 +20,9 @@ class HealthBar():
     if ship.size != 1:
       if ship.dir != "up" and ship.dir != "down":
         self.size = ship.size
+      else:
+        self.size = 1
+    else:
+      self.size = 1
 
   

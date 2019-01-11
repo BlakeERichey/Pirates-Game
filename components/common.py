@@ -1,4 +1,6 @@
 ##Functions that are used in several places are located here
+import pygame
+
 def pixelToCoord(pixelCoord, gridWidth):
   if gridWidth:
     x = int(pixelCoord[0]/gridWidth) + 1
@@ -99,3 +101,10 @@ def addNode(currentNode, newNode):
 
 def removeNode(currentNode):
   currentNode.getPrev().setNext(None)
+
+#validates if cursor is located between the defined parameters
+def cursorLocated(minX, maxX, minY, maxY):
+  mx, my = pygame.mouse.get_pos()
+  if mx >= minX and mx < maxX and my > minY and my < maxY:
+    return True
+  return False

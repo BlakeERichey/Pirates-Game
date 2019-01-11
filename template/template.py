@@ -32,6 +32,7 @@
 #             exit()
 
 #     gameDisplay.fill(background)
-#     gp_width = pygame.font.SysFont("Arial", 70, True).render("Testing", True, [0, 0, 0], None)
-#     gameDisplay.blit(gp_width, (0,0))
+#     font = pygame.font.SysFont("Arial", 70, True)
+#     text = font.render("Testing", True, [0, 0, 0], None)
+#     gameDisplay.blit(text, (0,0))
 #     pygame.display.update()
