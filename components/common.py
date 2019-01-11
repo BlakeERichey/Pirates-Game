@@ -1,13 +1,24 @@
 ##Functions that are used in several places are located here
 def pixelToCoord(pixelCoord, gridWidth):
+  if gridWidth:
     x = int(pixelCoord[0]/gridWidth) + 1
     y = int(pixelCoord[1]/gridWidth) + 1
     return (x,y)
+  else:
+    x = int((coord[0]-1) * 64)
+    y = int((coord[1]-1) * 64)
+    return (x,y)
+
 
 def coordToPixel(coord, gridWidth):
-  x = int((coord[0]-1) * gridWidth)
-  y = int((coord[1]-1) * gridWidth)
-  return (x, y)
+  if gridWidth:
+    x = int((coord[0]-1) * gridWidth)
+    y = int((coord[1]-1) * gridWidth)
+    return (x, y)
+  else:
+    x = int((coord[0]-1) * 64)
+    y = int((coord[1]-1) * 64)
+    return (x, y)
 
 def isInt(value):
   try:

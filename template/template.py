@@ -1,10 +1,10 @@
-##Template for a page
+# ##Template for a page
 # import pygame
-# import common
+# import components.common
 
-# from common import coordToPixel, isInt, isAdjacent, Node
+# from components.common import coordToPixel, isInt, isAdjacent, Node
 
-# def run_game():
+# def rename(root):
 #   pygame.init()
   
 #   background = (51, 70, 242)
@@ -19,7 +19,7 @@
 #   clock = pygame.time.Clock()
 
 #   #Check for events
-#   while True:
+#   while root.page=="rename":
 #     for event in pygame.event.get():
 #         if event.type == pygame.QUIT:
 #           pygame.quit()
@@ -35,5 +35,3 @@
 #     gp_width = pygame.font.SysFont("Arial", 70, True).render("Testing", True, [0, 0, 0], None)
 #     gameDisplay.blit(gp_width, (0,0))
 #     pygame.display.update()
-
-# run_game()
