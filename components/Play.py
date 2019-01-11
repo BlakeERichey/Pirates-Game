@@ -188,6 +188,9 @@ def Play(root):
       for ship in playerShips:
         gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
       renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
+
+      pygame.draw.rect(gameDisplay, (0,255,0), [0,0,64,10])
+      pygame.draw.rect(gameDisplay, (255,0,0), [32,0,32,10])
       
       #Rerender
       pygame.display.update()
