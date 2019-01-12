@@ -1,7 +1,6 @@
 improve movement collision
 incorporate more sprites
 add credits page
-and title screen
 add multiplayer
 add turns
 add server
@@ -15,3 +14,28 @@ towing, sinking ships, stealing
 fog of war
 repair mechanic for ships
 add environmental hazards
+
+Requeirements for Alpha:
+  Set up turns
+  broadside attack
+  ram
+  finish 
+  setting up menu bar 
+  placement of ship
+  win condition
+
+Requirements for Beta:
+  derelict status for ship
+  more sound effects
+  islands
+  resources/Gold
+  shop
+  repairs
+  fog of war
+  towing, stealing, sinking
+
+Requirements for final release:
+  network/peer-to-peer
+  compiled code
+  balance adjustments
+  credits

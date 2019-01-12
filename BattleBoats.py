@@ -11,7 +11,6 @@ from   components.common     import coordToPixel, isInt, isAdjacent, Node
 def run_game():
   root = State()
   pygame.init()
-  # root.page = "Setup"
 
   #Determine which page to display
   while True:

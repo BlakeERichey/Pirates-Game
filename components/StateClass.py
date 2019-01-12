@@ -8,6 +8,7 @@ class State():
     self.gridWidth = 64
     self.mx = None
     self.my = None
+    self.player1Ships = []
     self.allShips = []
     self.path = Path()
     self.select = False

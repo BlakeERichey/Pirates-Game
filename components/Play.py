@@ -13,19 +13,26 @@ def Play(root):
 
   #initalize music
   pygame.mixer.music.load('./resources/music/music.mp3')
-  pygame.mixer.music.play(loops=-1, start=0.0)
+  # pygame.mixer.music.play(loops=-1, start=0.0)
 
   #Set Player Ships
-  a = Ship("Schooner", (1,1))
-  newShip = Ship("Galley", (10,7))
+  a = Ship("Schooner", (10,10))
+  a.owner = "Player2"
+  newShip = Ship("Galley", (11,10))
   newShip.owner = "Player2"
-  b = Ship("Cargo", (10,2))
-  x = Ship("Schooner", (3,3))
-  y = Ship("Galley", (4,4))
+  b = Ship("Cargo", (12,10))
+  b.owner = "Player2"
+  x = Ship("Schooner", (13,10))
+  x.owner = "Player2"
+  y = Ship("Galley", (14,10))
   y.owner = "Player2"
-  z = Ship("Frigate", (5,5))
-  Player1Ships = [x, y, z, a, b, newShip] 
-  playerShips = [ship for ship in Player1Ships]
+  z = Ship("Frigate", (15,10))
+  z.owner = "Player2"
+  for ship in root.player1Ships:
+    ship.owner = "Player 1"
+  Player2Ships = [x, y, z, a, b, newShip] 
+  playerShips = [ship for ship in root.player1Ships]
+  playerShips += [ship for ship in Player2Ships]
   root.allShips = playerShips
   
 
@@ -101,7 +108,7 @@ def Play(root):
   
   def makeAttack(root):
     ship = root.shipClicked
-    miss = (False, True)[random.choice(range(1,6)) > ship.accuracy]
+    miss = False #(False, True)[random.choice(range(1,6)) > ship.accuracy]
     if not(miss):
       root.attack.hp -= root.shipClicked.damage
       print("hit")
@@ -117,7 +124,7 @@ def Play(root):
     pygame.init()
 
     #background = (51, 70, 242)
-    battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg')
+    battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg').convert()
     dangerIcon=pygame.image.load('./resources/images/danger.png')
 
     #Set GUI Size and title

@@ -15,28 +15,28 @@ class Ship():
     self.owner="Player1"
     self.coords = []
     if(ship == "Galley"):
-      self.size=2
-      self.damage=self.maxHp=self.masts=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
+      self.size=self.cannons=2
+      self.damage=self.maxHp=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
       self.image = pygame.image.load('./resources//images/Icon_Galley.png')
       self.imagePos = (self.pos)
     elif(ship=="Cargo"):
       self.damage=1
-      self.aRange=self.accuracy=self.speed=self.size=2
-      self.masts=self.sight=3
+      self.aRange=self.accuracy=self.speed=self.size=self.cannons=2
+      self.sight=3
       self.maxHp=4
       self.carry=5
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Cargo.png')
     elif(ship == "Schooner"):
-      self.damage=self.carry=self.size=1
-      self.maxHp=self.masts=self.aRange=2
+      self.damage=self.carry=self.size=self.cannons=1
+      self.maxHp=self.aRange=2
       self.accuracy=3
       self.speed=self.sight=5
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Schooner.png')
     elif(ship=="Frigate"):
       self.damage=self.aRange=self.accuracy=self.sight=4
-      self.maxHp=self.masts=self.size=3
+      self.maxHp=self.cannons=self.size=3
       self.speed=self.carry=2
       self.imagePos = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
@@ -50,7 +50,7 @@ class Ship():
     rv = "Ship:\nType: " + str(self.type) + "\nDirection: " + str(self.dir)
     rv += "\nPosition: " + str(self.pos) + "\nOwner: " + str(self.owner)
     rv += "\nDamage: " + str(self.damage)
-    rv += "\nHp: " + str(self.hp) + "\nMasts: " + str(self.masts)
+    rv += "\nHp: " + str(self.hp) + "\nCannons: " + str(self.cannons)
     rv += "\nRange: " + str(self.aRange) + "\nAccuracy: " + str(self.accuracy)
     rv += "\nSpeed: " + str(self.speed) + "\nCarry " + str(self.carry) + "\nSight: " + str(self.sight)
     rv += "\nimagePos" + str(self.imagePos) + "\nCoords: " + str(self.coords)
@@ -144,5 +144,5 @@ class Ship():
     x, y = coordToPixel(self.healthBar.pos, root.gridWidth)
     width = root.gridWidth * self.healthBar.size
     self.healthBar.setPercent(self)
-    pygame.draw.rect(display, (255,0,0), [x,y,width,5]) #draw red bar
-    pygame.draw.rect(display, (0,255,0), [x,y,width*self.healthBar.percent,5]) #draw green bar
+    pygame.draw.rect(display, (255,0,0), [x+5,y,width-10,5]) #draw red bar
+    pygame.draw.rect(display, (0,255,0), [x+5,y,width*self.healthBar.percent-10,5]) #draw green bar

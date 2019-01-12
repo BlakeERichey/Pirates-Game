@@ -1,1 +1,1 @@
-display attackable squares is rendering multiple times on a square
+left and right click in "Play" causes crash
