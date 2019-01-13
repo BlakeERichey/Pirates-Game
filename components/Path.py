@@ -7,9 +7,10 @@ from components.common import (coordToPixel, isInt, isAdjacent, Node, addNode,
 class Path():
 
   def __init__(self):
-    self.head  = Node(None)
-    self.dir   = None
-    self.tail  = None
+    self.head   = Node(None)
+    self.dir    = None
+    self.tail   = None
+    self.length = 0
 
   #displays path
   def renderArrow(self, background, root): #additional parameter: background
@@ -44,14 +45,17 @@ class Path():
     and (not(isBehind(root.shipClicked, pos)))):
       self.head.setData(Part("path", pos))
       self.head.getData().setDir(root.shipClicked.pos, pos)
+      self.length = 1
 
     #pos in linked list and is equal to the previous position to the last
     if (len(allCoord) >= 2 and pos == allCoord[len(allCoord)-2].pos):
       removeNode(currentNode)
+      self.length -= 1
 
     #return to zero length of path path
     if (len(allCoord) == 1 and pos == root.shipClicked.pos):
       self.head = Node(None)
+      self.length = 0
 
     #if pos is adjacent to the last position in linked list
     if (len(allCoord) > 0):
@@ -60,6 +64,7 @@ class Path():
       tempPart = Part("path", pos)
       tempPart.setDir(lastCoord.pos, pos)
       addNode(currentNode, Node(tempPart))
+      self.length += 1
 
       
 

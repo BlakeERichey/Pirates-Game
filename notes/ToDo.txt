@@ -16,10 +16,6 @@ repair mechanic for ships
 add environmental hazards
 
 Requeirements for Alpha:
-  finish setting up menu bar (end turn, quit game) 
-  Set up turns
-  placement of ship of player 2 after setup page done
-  win condition
   broadside attack
   ram
 

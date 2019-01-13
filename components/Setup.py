@@ -204,13 +204,13 @@ def Setup(root):
         font        = pygame.font.SysFont("Arial", 70, True)
         smallFont   = pygame.font.SysFont("Arial", 24, True)
         subtract    = font.render("–", True, [0, 0, 0], None)
+        player1     = font.render("Player 2", True, [0,0,0], None)
+        submit      = smallFont.render("Submit", True, [0, 0, 0], None)
         cargoQty    = font.render(str(state.cargoQty), True, [0, 0, 0], None)
         galleyQty   = font.render(str(state.galleyQty), True, [0, 0, 0], None)
         schoonerQty = font.render(str(state.schoonerQty), True, [0, 0, 0], None)
         addition    = pygame.font.SysFont("Arial", 80, True).render("  +", True, [0, 0, 0], None)
         pointsLeft  = font.render("Points Left: " + str(state.pointsLeft), True, [0, 0, 0], None)
-        submit      = smallFont.render("Submit", True, [0, 0, 0], None)
-        player1     = font.render("Player 2", True, [0,0,0], None)
 
         #Render Button
         pygame.draw.rect(gameDisplay, (105,105,105), [850,900,100,50]) #draw grey button

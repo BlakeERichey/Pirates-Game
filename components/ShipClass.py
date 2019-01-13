@@ -1,6 +1,6 @@
 import pygame, components.common, components.HealthBar
 from   components.HealthBar  import HealthBar
-from   components.common     import coordToPixel
+from   components.common     import coordToPixel, findDistance
 
 
 class Ship():
@@ -9,41 +9,43 @@ class Ship():
   #schSpriteRight = pygame.transform.rotate(schSprite, 90)
 
   def __init__(self, ship, pos):
-    self.type=ship
-    self.dir="up"
-    self.pos = pos
-    self.owner="Player1"
+    self.type   = ship
+    self.dir    = "up"
+    self.pos    = pos
+    self.owner  = "Player1"
     self.coords = []
     if(ship == "Galley"):
-      self.size=self.cannons=2
-      self.damage=self.maxHp=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
-      self.image = pygame.image.load('./resources//images/Icon_Galley.png')
+      self.size     = self.cannons=2
+      self.damage   = self.maxHp=self.aRange=self.accuracy=self.speed=self.carry=self.sight=3
+      self.image    = pygame.image.load('./resources//images/Icon_Galley.png')
       self.imagePos = (self.pos)
     elif(ship=="Cargo"):
-      self.damage=1
-      self.aRange=self.accuracy=self.speed=self.size=self.cannons=2
-      self.sight=3
-      self.maxHp=4
-      self.carry=5
+      self.damage   = 1
+      self.aRange   = self.accuracy=self.speed=self.size=self.cannons=2
+      self.sight    = 3
+      self.maxHp    = 4
+      self.carry    = 5
       self.imagePos = (self.pos)
-      self.image = pygame.image.load('./resources//images/Icon_Cargo.png')
+      self.image    = pygame.image.load('./resources//images/Icon_Cargo.png')
     elif(ship == "Schooner"):
       self.damage=self.carry=self.size=self.cannons=1
-      self.maxHp=self.aRange=2
-      self.accuracy=3
-      self.speed=self.sight=5
-      self.imagePos = (self.pos)
-      self.image = pygame.image.load('./resources//images/Icon_Schooner.png')
+      self.maxHp=self.aRange    =2
+      self.accuracy             =3
+      self.speed=self.sight     =5
+      self.imagePos             = (self.pos)
+      self.image                = pygame.image.load('./resources//images/Icon_Schooner.png')
     elif(ship=="Frigate"):
-      self.damage=self.aRange=self.accuracy=self.sight=4
-      self.maxHp=self.cannons=self.size=3
-      self.speed=self.carry=2
-      self.imagePos = (self.pos)
+      self.damage=self.aRange=self.accuracy=self.sight  =4
+      self.maxHp=self.cannons=self.size                 =3
+      self.speed=self.carry                             =2
+      self.imagePos                                     = (self.pos)
       self.image = pygame.image.load('./resources//images/Icon_Frigate.png')
     self.maxHp = 2 * self.maxHp
     self.hp = self.maxHp
     self.setCoords()
     self.healthBar = HealthBar(self.pos)
+    self.canMove  = self.speed  #used by turn handler to set limits on amount of actions a ship can perform
+    self.canAtk   = True  #used by turn handler to set limits on amount of actions a ship can perform
     
           
   def __str__(self):
@@ -73,8 +75,11 @@ class Ship():
   #newPos: pixel coordinate of new position for ship to be moved to
   def moveShip(self, root):
     if root.path.tail.getData() != None:
-      newPos = (coordToPixel(root.path.tail.getData().pos, root.gridWidth))
+      pos = root.path.tail.getData().pos  #coordinate of new position
+      newPos = (coordToPixel(pos, root.gridWidth))
       gridWidth = root.gridWidth
+      self.canMove -= root.path.length
+      print("movement left", self.canMove)
       self.setPosition((newPos), gridWidth)
       self.setDir(root.path.tail.getData().dir)
       self.setImagePos()

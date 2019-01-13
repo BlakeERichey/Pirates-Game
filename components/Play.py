@@ -15,25 +15,13 @@ def Play(root):
   pygame.mixer.music.load('./resources/music/music.mp3')
   # pygame.mixer.music.play(loops=-1, start=0.0)
 
-  #Set Player Ships
-  # a = Ship("Frigate", (10,10))
-  # a.owner = "Player2"
-  # newShip = Ship("Galley", (11,10))
+  # newShip = Ship("Frigate", (10,10))
   # newShip.owner = "Player2"
-  # b = Ship("Frigate", (12,10))
-  # b.owner = "Player2"
-  # x = Ship("Frigate", (13,10))
-  # x.owner = "Player2"
-  # y = Ship("Galley", (14,10))
-  # y.owner = "Player2"
-  # z = Ship("Frigate", (15,10))
-  # z.owner = "Player2"
-  # for ship in root.player1Ships:
-  #   ship.owner = "Player 1"
-  # Player2Ships = [x, y, z, a, b, newShip] 
   playerShips = [ship for ship in root.player1Ships]
   playerShips += [ship for ship in root.player2Ships]
+  # playerShips.append(newShip)
   root.allShips = playerShips
+  root.setPlayers(2)  #sets number of players
   
 
   #Takes coordinate and determines which ship if any it corresponds to
@@ -52,7 +40,7 @@ def Play(root):
     ship2 = getShip(newCoord, root.allShips)
     distance = abs(ship.pos[0] - newCoord[0]) + abs(ship.pos[1] - newCoord[1])
 
-    if distance > ship.speed:
+    if root.path.length > ship.canMove: #needs to be path distance
       print("distance too great")
       return False
     if (ship2):
@@ -108,7 +96,8 @@ def Play(root):
   
   def makeAttack(root):
     ship = root.shipClicked
-    miss = (False, True)[random.choice(range(1,6)) > ship.accuracy]
+    ship.canAtk = False
+    miss = (False, True)[random.choice(range(1,6)) > ship.accuracy] #determine if hit by accuracy
     if not(miss):
       root.attack.hp -= root.shipClicked.damage
       print("hit")
@@ -119,6 +108,16 @@ def Play(root):
       root.allShips.remove(root.attack)
     root.attack = None
     root.shipClicked = None
+
+  #checks to see if all other players ship are destoryed
+  def checkForWinner(root):
+    winner = root.allShips[0].owner
+    for ship in root.allShips:
+      if ship.owner != winner:
+        return False
+    print(winner)
+    root.page = "GameOver"
+    return winner
 
   def run_game():
     pygame.init()
@@ -134,6 +133,7 @@ def Play(root):
 
     #Check for events
     while root.page == "Play":
+      checkForWinner(root)
       root.mx = None
       root.my = None
 
@@ -144,16 +144,6 @@ def Play(root):
         root.showMenu = False
 
       for event in pygame.event.get():
-        # print("\n\n\n\n" + root)
-        if event.type == pygame.QUIT:
-          pygame.quit()
-          quit()
-
-        #Monitor when keyboard key is pressed
-        if event.type == pygame.KEYDOWN:
-          if event.key == pygame.K_ESCAPE:
-            pygame.quit()
-            exit()
 
         #Monitor when mouse is pressed
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -161,6 +151,18 @@ def Play(root):
           #get position of mouse and save it as mx and my
           if (pygame.mouse.get_pressed()[0] == 1):
             root.mx, root.my = pygame.mouse.get_pos()
+
+            #if menu shown and click on a button perform specified action
+            if cursorLocated(-1, 63, -1, 30) and root.showMenu:
+              print(root.currentPlayer.getData() + "'s turn is over.")
+              root.endTurn()
+              print("It is now " + root.currentPlayer.getData() + "'s turn.")
+              root.mx = None
+              root.my = None
+            elif cursorLocated(1856, 1921, -1, 30) and root.showMenu:
+              print("Exiting Game")
+              pygame.quit()
+              exit()
         
           #If ship was clicked, set state of flagDrag to true
           if(root.mx != None):
@@ -171,8 +173,11 @@ def Play(root):
             else:
               root.shipClicked = getShip(coord, playerShips)
               if(root.shipClicked):
-                root.flagDrag = True
-                print("You clicked a", root.shipClicked.type)
+                if root.shipClicked.owner != root.currentPlayer.getData():
+                  root.shipClicked = False
+                else:
+                  root.flagDrag = True
+                  print("You clicked a", root.shipClicked.type)
               
         if root.flagDrag:
           mx, my = pygame.mouse.get_pos()
@@ -184,11 +189,12 @@ def Play(root):
           print("key lifted")
           newMx, newMy = pygame.mouse.get_pos()
           coord = pixelToCoord((newMx, newMy), root.gridWidth)
+          #activate ship instead of moving ship
           if coord in root.shipClicked.coords:
             print("Ship Active but not dragging")
             print(root.canHit)
             root.flagDrag = False
-          else:
+          else: #Move ship
             res = moveIsValid(root.shipClicked, (newMx, newMy))
             print("Move is valid: ", res)
             if(res):
@@ -210,11 +216,18 @@ def Play(root):
         ship.renderHealthBar(gameDisplay, root)
       renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
 
+      #Define text
+      smallFont   = pygame.font.SysFont("Arial", 16, True)
+      endTurn     = smallFont.render("End Turn", True, [0, 0, 0], None)
+      exitGame    = smallFont.render("Exit Game", True, [0, 0, 0], None)
+
       #Show menu bar
       if root.showMenu == True:
         pygame.draw.rect(gameDisplay, (32,32,32), [0,0,display_width,30]) #draw grey bar
-        pygame.draw.rect(gameDisplay, (105,105,105), [0,0,63,30]) #draw first menu option bar
-        pygame.draw.rect(gameDisplay, (105,105,105), [65,0,64,30]) #draw first menu option bar
+        pygame.draw.rect(gameDisplay, (105,105,105), [0,0,63,30]) #draw first menu option
+        pygame.draw.rect(gameDisplay, (200,0,0), [1856,0,64,30]) #draw exit menu option
+        gameDisplay.blit(endTurn, (1,3))
+        gameDisplay.blit(exitGame, (1856,3))
 
       
       #Rerender
