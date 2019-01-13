@@ -15,11 +15,11 @@ def Play(root):
   pygame.mixer.music.load('./resources/music/music.mp3')
   # pygame.mixer.music.play(loops=-1, start=0.0)
 
-  # newShip = Ship("Frigate", (3,4))
-  # newShip.owner = "Player2"
+  newShip = Ship("Frigate", (3,4))
+  newShip.owner = "Player2"
   playerShips = [ship for ship in root.player1Ships]
   playerShips += [ship for ship in root.player2Ships]
-  # playerShips.append(newShip)
+  playerShips.append(newShip)
   root.allShips = playerShips
   root.setPlayers(2)  #sets number of players
   
@@ -58,10 +58,10 @@ def Play(root):
         return False
     return True
 
-  #sets root.canHit to all locations active ship can hit that contains an enemy ship
+  #sets root.shipClicked.canHit to all locations active ship can hit that contains an enemy ship
   def findCanHit(root):
-    root.canHit = [] #reset canHit in event no ship is clicked
     if root.shipClicked:
+      root.shipClicked.canHit = [] #reset canHit
       maxX = int(display_width / root.gridWidth) + 1
       maxY = int(display_height / root.gridWidth) + 2
       allPossibleCoords = []
@@ -81,32 +81,67 @@ def Play(root):
         for point in ship.coords:
           otherShipsCoords.append(point) 
       
-      #if enemy ship location point is within range of ship clicked, add point to root.canHit
+      #if enemy ship location point is within range of ship clicked, add point to root.shipClicked.canHit
       for point in allPossibleCoords:
         for coord in root.shipClicked.coords:
           if findDistance(coord, point) <= root.shipClicked.aRange and point in otherShipsCoords:
-            if point not in root.canHit:
-              root.canHit.append(point)     
+            if point not in root.shipClicked.canHit:  
+              root.shipClicked.canHit.append(point)
+  
+  #finds points that a ship can fire at that it can also broadside
+  def findCanBroadside(root):
+    root.shipClicked.canBroadside = [] #reset canBroadside
+    #find available locations that can be broadsided to right/left of ship
+    if root.shipClicked.dir == "up" or root.shipClicked.dir == "down":
+      for shipCoord in root.shipClicked.coords:  #check y values
+        for canHitCoord in root.shipClicked.canHit:
+          if shipCoord[1] == canHitCoord[1]:
+            if canHitCoord not in root.shipClicked.canBroadside:
+              root.shipClicked.canBroadside.append(canHitCoord)
+    elif root.shipClicked.dir == "left" or root.shipClicked.dir == "right":
+       for shipCoord in root.shipClicked.coords:  #check x values
+        for canHitCoord in root.shipClicked.canHit:
+          if shipCoord[0] == canHitCoord[0]:
+            if canHitCoord not in root.shipClicked.canBroadside:
+              root.shipClicked.canBroadside.append(canHitCoord)
 
-  #displays red box everywhere active ship can hit an enemy ship
-  def renderCanHit(root, display, icon):
+
+  #displays orange box everywhere active ship can hit an enemy ship
+  def renderCanHit(root, display, hitIcon, broadsideIcon):
     if root.shipClicked and root.shipClicked.canAtk:
       findCanHit(root)
-      for point in root.canHit:
-        display.blit(icon, coordToPixel(point, root.gridWidth))
+      findCanBroadside(root)
+      for point in root.shipClicked.canHit:
+        if point not in root.shipClicked.canBroadside:
+          display.blit(hitIcon, coordToPixel(point, root.gridWidth))
+      for point in root.shipClicked.canBroadside:
+        display.blit(broadsideIcon, coordToPixel(point, root.gridWidth))
     else:
-      root.canHit = []
+      root.shipClicked.canHit = []
+
   
-  def makeAttack(root):
+  def makeAttack(root, coord):
     if root.shipClicked and root.shipClicked.canAtk == True:
       ship = root.shipClicked
       ship.canAtk = False
-      miss = (False, True)[random.choice(range(1,6)) > ship.accuracy] #determine if hit by accuracy
-      if not(miss):
-        root.attack.hp -= root.shipClicked.damage
-        print("hit")
+      if coord in root.shipClicked.canBroadside:
+        hits = 0
+        for atk in range (0, ship.cannons):
+          check = random.choice(range(1,6))
+          print("fired, accuracy:", check)
+          if((False, True)[check <= ship.accuracy]): #determine if hit by accuracy
+            hits+=1
+        print("shit hit ", hits, " Number of times")
+        for shot in range (0, hits):
+          root.attack.hp -= root.shipClicked.damage
+          print("hit")
       else:
-        print("miss")
+        miss = (False, True)[random.choice(range(1,6)) > ship.accuracy] #determine if hit by accuracy
+        if not(miss):
+          root.attack.hp -= root.shipClicked.damage
+          print("hit")
+        else:
+          print("miss")
       print(root.attack.type, "Health after attack is", root.attack.hp)
       if root.attack.hp <= 0:
         root.allShips.remove(root.attack)
@@ -128,7 +163,8 @@ def Play(root):
 
     #background = (51, 70, 242)
     battlefieldBackground=pygame.image.load('./resources/images/background-battlefield.jpg').convert()
-    dangerIcon=pygame.image.load('./resources/images/danger.png')
+    hitIcon=pygame.image.load('./resources/images/Hit.png')
+    broadsideIcon = pygame.image.load('./resources/images/Broadside.png')
 
     #Set GUI Size and title
     gameDisplay = pygame.display.set_mode((display_width, display_height), pygame.FULLSCREEN)
@@ -153,7 +189,7 @@ def Play(root):
         if event.type == pygame.MOUSEBUTTONDOWN:
           #if left mouse button is pressed, 
           #get position of mouse and save it as mx and my
-          if (pygame.mouse.get_pressed()[0] == 1):
+          if (pygame.mouse.get_pressed()[0] == 1) and root.flagDrag== False:
             root.mx, root.my = pygame.mouse.get_pos()
 
             #if menu shown and click on a button perform specified action
@@ -171,9 +207,9 @@ def Play(root):
           #If ship was clicked, set state of flagDrag to true
           if(root.mx != None):
             coord = pixelToCoord((root.mx, root.my), root.gridWidth)
-            if coord in root.canHit:
+            if root.shipClicked and coord in root.shipClicked.canHit:  #if clicked an attackable ship, make attack
                 root.attack = getShip(coord, playerShips)
-                makeAttack(root)
+                makeAttack(root, coord)
             else:
               root.shipClicked = getShip(coord, playerShips)
               if(root.shipClicked):
@@ -196,7 +232,7 @@ def Play(root):
           #activate ship instead of moving ship
           if coord in root.shipClicked.coords:
             print("Ship Active but not dragging")
-            print(root.canHit)
+            print("movement left", root.shipClicked.canMove)
             root.flagDrag = False
           else: #Move ship
             res = moveIsValid(root.shipClicked, (newMx, newMy))
@@ -208,6 +244,7 @@ def Play(root):
             root.path = Path()
 
 
+      ##Render
       #Load and Fill Background
       gameDisplay.blit(battlefieldBackground, (0,0))
 
@@ -218,7 +255,8 @@ def Play(root):
       for ship in playerShips:
         gameDisplay.blit(ship.image, ship.getPosition(root.gridWidth))
         ship.renderHealthBar(gameDisplay, root)
-      renderCanHit(root, gameDisplay, dangerIcon) #ship shooting locations
+      if root.shipClicked:
+        renderCanHit(root, gameDisplay, hitIcon, broadsideIcon) #ship shooting locations
 
       #Define text
       smallFont   = pygame.font.SysFont("Arial", 16, True)
@@ -233,8 +271,6 @@ def Play(root):
         gameDisplay.blit(endTurn, (1,3))
         gameDisplay.blit(exitGame, (1856,3))
 
-      
-      #Rerender
       pygame.display.update()
 
       time.sleep(0.03)

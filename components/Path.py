@@ -30,7 +30,7 @@ class Path():
   #pos: coord, not pixel location
   def updateArrow(self, pos, root):
     currentNode = self.head
-    allCoord = []
+    allCoord = [] #list of all parts of linked list
     #generate list of all parts in linked list, currentNode is set to last Node in linked list
     while(currentNode.getNext() != None):
       allCoord.append(currentNode.getData())
@@ -42,29 +42,26 @@ class Path():
 
     #position is adjacent to ship and linked list has no length
     if (pos not in allCoord and isAdjacent(pos, root.shipClicked.pos) and self.head.getData() == None 
-    and (not(isBehind(root.shipClicked, pos)))):
+    and (not(isBehind(root.shipClicked, pos))) and root.shipClicked.canMove > 0):
       self.head.setData(Part("path", pos))
       self.head.getData().setDir(root.shipClicked.pos, pos)
-      self.length = 1
 
     #pos in linked list and is equal to the previous position to the last
     if (len(allCoord) >= 2 and pos == allCoord[len(allCoord)-2].pos):
       removeNode(currentNode)
-      self.length -= 1
 
-    #return to zero length of path path
+    #return to path length of 0
     if (len(allCoord) == 1 and pos == root.shipClicked.pos):
       self.head = Node(None)
-      self.length = 0
 
     #if pos is adjacent to the last position in linked list
     if (len(allCoord) > 0):
       lastCoord = allCoord[len(allCoord) - 1]
-    if len(allCoord) > 0 and len(allCoord) < root.shipClicked.speed and pos != lastCoord.pos and isAdjacent(lastCoord.pos, pos): 
+    if len(allCoord) > 0 and len(allCoord) < root.shipClicked.canMove and pos != lastCoord.pos and isAdjacent(lastCoord.pos, pos): 
       tempPart = Part("path", pos)
       tempPart.setDir(lastCoord.pos, pos)
       addNode(currentNode, Node(tempPart))
-      self.length += 1
+    self.length = len(allCoord)
 
       
 

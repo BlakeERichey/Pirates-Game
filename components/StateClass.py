@@ -39,7 +39,7 @@ class State():
     self.path = Path()
     self.select = False
     self.page = "Menu"
-    self.canHit = []  #represents list of available places that a ship can hit
+    self.renderCanHit = False  #represents list of available places that a ship can hit
     self.attack = None #represents Ship being attacked
     self.showMenu = False #Should top menu bar of game be displayed
     self.currentPlayer = None #contains a node that contains the next player and current player. To access current player call .getData()
@@ -57,6 +57,7 @@ class State():
     rv += "\nattack: "      + str(self.attack)
     return rv
 
+  #creates circular linked list of players and assign the head of the list to self.currentPlayer
   def setPlayers(self, numPlayers):
     playerList = PlayerTurn(numPlayers)
     self.currentPlayer = playerList.head
@@ -69,3 +70,4 @@ class State():
         ship.canMove = ship.speed
         ship.canAtk  = True
     self.currentPlayer = self.currentPlayer.getNext() #move to new player
+    self.shipClicked = False

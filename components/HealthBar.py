@@ -24,5 +24,3 @@ class HealthBar():
         self.size = 1
     else:
       self.size = 1
-
-  

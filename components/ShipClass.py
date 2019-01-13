@@ -46,6 +46,8 @@ class Ship():
     self.healthBar = HealthBar(self.pos)
     self.canMove  = self.speed  #used by turn handler to set limits on amount of actions a ship can perform
     self.canAtk   = True  #used by turn handler to set limits on amount of actions a ship can perform
+    self.canHit   = []    #list of coordinates available to be attacked
+    self.canBroadside = []  #list of coordinates that the ship can broadside atk
     
           
   def __str__(self):
