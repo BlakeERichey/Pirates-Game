@@ -15,7 +15,7 @@ def Play(root):
   pygame.mixer.music.load('./resources/music/music.mp3')
   # pygame.mixer.music.play(loops=-1, start=0.0)
 
-  # newShip = Ship("Frigate", (10,10))
+  # newShip = Ship("Frigate", (3,4))
   # newShip.owner = "Player2"
   playerShips = [ship for ship in root.player1Ships]
   playerShips += [ship for ship in root.player2Ships]
@@ -90,22 +90,26 @@ def Play(root):
 
   #displays red box everywhere active ship can hit an enemy ship
   def renderCanHit(root, display, icon):
-    findCanHit(root)
-    for point in root.canHit:
-      display.blit(icon, coordToPixel(point, root.gridWidth))
+    if root.shipClicked and root.shipClicked.canAtk:
+      findCanHit(root)
+      for point in root.canHit:
+        display.blit(icon, coordToPixel(point, root.gridWidth))
+    else:
+      root.canHit = []
   
   def makeAttack(root):
-    ship = root.shipClicked
-    ship.canAtk = False
-    miss = (False, True)[random.choice(range(1,6)) > ship.accuracy] #determine if hit by accuracy
-    if not(miss):
-      root.attack.hp -= root.shipClicked.damage
-      print("hit")
-    else:
-      print("miss")
-    print(root.attack.type, "Health after attack is", root.attack.hp)
-    if root.attack.hp <= 0:
-      root.allShips.remove(root.attack)
+    if root.shipClicked and root.shipClicked.canAtk == True:
+      ship = root.shipClicked
+      ship.canAtk = False
+      miss = (False, True)[random.choice(range(1,6)) > ship.accuracy] #determine if hit by accuracy
+      if not(miss):
+        root.attack.hp -= root.shipClicked.damage
+        print("hit")
+      else:
+        print("miss")
+      print(root.attack.type, "Health after attack is", root.attack.hp)
+      if root.attack.hp <= 0:
+        root.allShips.remove(root.attack)
     root.attack = None
     root.shipClicked = None
 
