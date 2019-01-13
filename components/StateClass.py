@@ -9,6 +9,7 @@ class State():
     self.mx = None
     self.my = None
     self.player1Ships = []
+    self.player2Ships = []
     self.allShips = []
     self.path = Path()
     self.select = False

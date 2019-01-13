@@ -77,7 +77,7 @@ class Ship():
       gridWidth = root.gridWidth
       self.setPosition((newPos), gridWidth)
       self.setDir(root.path.tail.getData().dir)
-      self.setImagePos(root)
+      self.setImagePos()
       self.setCoords()
       self.healthBar.move(self)
 
@@ -103,27 +103,26 @@ class Ship():
       self.image = pygame.transform.rotate(image, 180)
 
   #relocates where ship image renders based on the size of the ship
-  def setImagePos(self, root):
-    ship = root.shipClicked
-    if ship.type != "Schooner":
-      if ship.dir == "right":
-        if ship.type == "Frigate":
-          ship.imagePos = (ship.pos[0] - 2, ship.pos[1]) 
-        elif ship.type == "Galley":
-          ship.imagePos = (ship.pos[0] - 1, ship.pos[1])
-        elif ship.type == "Cargo":
-          ship.imagePos = (ship.pos[0] - 1, ship.pos[1])  
-      elif ship.dir == "down":
-        if ship.type == "Frigate":
-          ship.imagePos = (ship.pos[0], ship.pos[1] - 2) 
-        elif ship.type == "Galley":
-          ship.imagePos = (ship.pos[0], ship.pos[1] - 1)
-        elif ship.type == "Cargo":
-          ship.imagePos = (ship.pos[0], ship.pos[1] - 1) 
+  def setImagePos(self):
+    if self.type != "Schooner":
+      if self.dir == "right":
+        if self.type == "Frigate":
+          self.imagePos = (self.pos[0] - 2, self.pos[1]) 
+        elif self.type == "Galley":
+          self.imagePos = (self.pos[0] - 1, self.pos[1])
+        elif self.type == "Cargo":
+          self.imagePos = (self.pos[0] - 1, self.pos[1])  
+      elif self.dir == "down":
+        if self.type == "Frigate":
+          self.imagePos = (self.pos[0], self.pos[1] - 2) 
+        elif self.type == "Galley":
+          self.imagePos = (self.pos[0], self.pos[1] - 1)
+        elif self.type == "Cargo":
+          self.imagePos = (self.pos[0], self.pos[1] - 1) 
       else:
-        ship.imagePos = ship.pos
+        self.imagePos = self.pos
     else:
-      ship.imagePos = ship.pos
+      self.imagePos = self.pos
   
   #sets location of all points the ship
   def setCoords(self):
