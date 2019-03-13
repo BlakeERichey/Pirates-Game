@@ -13,13 +13,13 @@ def Play(root):
 
   #initalize music
   pygame.mixer.music.load('./resources/music/music.mp3')
-  # pygame.mixer.music.play(loops=-1, start=0.0)
+  pygame.mixer.music.play(loops=-1, start=0.0)
 
-  newShip = Ship("Frigate", (3,4))
-  newShip.owner = "Player2"
+  # newShip = Ship("Frigate", (3,4))
+  # newShip.owner = "Player2"
   playerShips = [ship for ship in root.player1Ships]
   playerShips += [ship for ship in root.player2Ships]
-  playerShips.append(newShip)
+  # playerShips.append(newShip)
   root.allShips = playerShips
   root.setPlayers(2)  #sets number of players
   

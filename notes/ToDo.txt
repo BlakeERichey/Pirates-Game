@@ -16,7 +16,6 @@ repair mechanic for ships
 add environmental hazards
 
 Requeirements for Alpha:
-  broadside attack
   ram
 
 Requirements for Beta:

@@ -1,2 +1,13 @@
 update Node Class to manage adding and removing nodes
 update setup menu to display when hovering over a button
+
+sound effects for shooting, selecting, hitting, sinking ships
+more clear what ships have moved and attacked/can attacked
+whos turn it is
+path finding faster
+cant move through ships
+cant fire broadside through ships
+splash art for damage
+hex grid - map data structure
+cannon ball firing
+implement lost island with super mega ultra environmental hazard, perhaps banana monster
